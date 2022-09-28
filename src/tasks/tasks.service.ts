@@ -19,4 +19,8 @@ export class TasksService {
     this.tasks = [...this.tasks, task];
     return task;
   }
+
+  getById(id: string): Task | undefined {
+    return this.tasks.find((item) => item.id === id);
+  }
 }
