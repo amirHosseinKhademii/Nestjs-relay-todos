@@ -27,4 +27,10 @@ export class TasksService {
   removeById(id: string): void {
     this.tasks = this.tasks.filter((item) => item.id !== id);
   }
+
+  updateById(id: string, body: Partial<CreateTaskDto>) {
+    this.tasks = this.tasks.map((item) =>
+      item.id === id ? { ...item, ...body } : item,
+    );
+  }
 }
