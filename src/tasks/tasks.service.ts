@@ -23,4 +23,8 @@ export class TasksService {
   getById(id: string): Task | undefined {
     return this.tasks.find((item) => item.id === id);
   }
+
+  removeById(id: string): void {
+    this.tasks = this.tasks.filter((item) => item.id !== id);
+  }
 }
