@@ -28,9 +28,9 @@ export class TasksService {
     this.tasks = this.tasks.filter((item) => item.id !== id);
   }
 
-  updateById(id: string, body: Partial<CreateTaskDto>) {
+  updateById(id: string, status: TaskStatus) {
     this.tasks = this.tasks.map((item) =>
-      item.id === id ? { ...item, ...body } : item,
+      item.id === id ? { ...item, status } : item,
     );
   }
 }
