@@ -9,10 +9,14 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectRepository(User) private repo: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private repo: Repository<User>,
+    private jwt: JwtService,
+  ) {}
 
   async createUser({ username, password }: CreateUserDto): Promise<void> {
     const salt = await bcrypt.genSalt();
@@ -30,7 +34,7 @@ export class AuthService {
   async signin({ username, password }: CreateUserDto): Promise<string> {
     const user = await this.repo.findOneBy({ username });
     if (user && (await bcrypt.compare(password, user.password)))
-      return 'success';
+      return await this.jwt.sign({ username });
     else throw new UnauthorizedException('Check your credentials.');
   }
 }
