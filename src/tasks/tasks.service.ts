@@ -11,20 +11,6 @@ import { Repository } from 'typeorm';
 export class TasksService {
   constructor(@InjectRepository(Task) private repo: Repository<Task>) {}
 
-  async getById(id: string): Promise<Task> | undefined {
-    const task = await this.repo.findOneBy({ id });
-    if (task) return task;
-    throw new NotFoundException('No task by this id.');
-  }
-
-  // getAllTasks(): Task[] {
-  //   return this.tasks;
-  // }
-  // getFilterTasks({ search, status }: GetTaskFilterDto) {
-  //   return this.tasks.filter(
-  //     (item) => item.status === status && item.title === search,
-  //   );
-  // }
   async createTask(body: CreateTaskDto): Promise<Task> {
     const task = await this.repo.create({
       ...body,
@@ -32,17 +18,34 @@ export class TasksService {
     });
     return await this.repo.save(task);
   }
-  // getById(id: string): Task | undefined {
-  //   const task = this.tasks.find((item) => item.id === id);
-  //   if (task) return task;
-  //   throw new NotFoundException('No task by this id');
-  // }
-  // removeById(id: string): void {
-  //   this.tasks = this.tasks.filter((item) => item.id !== id);
-  // }
-  // updateById(id: string, status: TaskStatus) {
-  //   this.tasks = this.tasks.map((item) =>
-  //     item.id === id ? { ...item, status } : item,
-  //   );
-  // }
+
+  async getById(id: string): Promise<Task> | undefined {
+    const task = await this.repo.findOneBy({ id });
+    if (task) return task;
+    throw new NotFoundException('No task by this id.');
+  }
+
+  async removeById(id: string): Promise<void> {
+    await this.repo.delete(id);
+  }
+
+  async updateById(id: string, status: TaskStatus): Promise<Task> {
+    const task = await this.getById(id);
+    task.status = status;
+    await this.repo.save(task);
+    return task;
+  }
+
+  async getAll({ search, status }: GetTaskFilterDto): Promise<Task[]> {
+    const query = this.repo.createQueryBuilder('task');
+    if (status) query.andWhere('task.status = :status', { status });
+    if (search)
+      query.andWhere(
+        'task.title LIKE :search OR task.description lIKE :search',
+        {
+          search: `%${search}%`,
+        },
+      );
+    return query.getMany();
+  }
 }
