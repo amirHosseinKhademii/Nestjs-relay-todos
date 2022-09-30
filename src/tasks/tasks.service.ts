@@ -46,7 +46,7 @@ export class TasksService {
     if (status) query.andWhere('task.status = :status', { status });
     if (search)
       query.andWhere(
-        'LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) lIKE LOWER(:search)',
+        '(LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) lIKE LOWER(:search))',
         {
           search: `%${search}%`,
         },
