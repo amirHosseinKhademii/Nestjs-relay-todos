@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -24,5 +25,12 @@ export class AuthService {
         throw new ConflictException('User already exist.');
       else throw new InternalServerErrorException('Something went wrong.');
     }
+  }
+
+  async signin({ username, password }: CreateUserDto): Promise<string> {
+    const user = await this.repo.findOneBy({ username });
+    if (user && (await bcrypt.compare(password, user.password)))
+      return 'success';
+    else throw new UnauthorizedException('Check your credentials.');
   }
 }

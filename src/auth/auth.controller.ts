@@ -10,4 +10,9 @@ export class AuthController {
   signup(@Body() body: CreateUserDto): Promise<void> {
     return this.service.createUser(body);
   }
+
+  @Post('signin')
+  signin(@Body() body: CreateUserDto): Promise<string> {
+    return this.service.signin(body);
+  }
 }
