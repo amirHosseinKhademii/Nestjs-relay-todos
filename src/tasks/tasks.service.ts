@@ -20,18 +20,18 @@ export class TasksService {
     return await this.repo.save(task);
   }
 
-  async getById(id: string): Promise<Task> | undefined {
-    const task = await this.repo.findOneBy({ id });
+  async getById(id: string, user: User): Promise<Task> | undefined {
+    const task = await this.repo.findOne({ where: { id, user } });
     if (task) return task;
     throw new NotFoundException('No task by this id.');
   }
 
-  async removeById(id: string): Promise<void> {
-    await this.repo.delete(id);
+  async removeById(id: string, user: User): Promise<void> {
+    await this.repo.delete({ id, user });
   }
 
-  async updateById(id: string, status: TaskStatus): Promise<Task> {
-    const task = await this.getById(id);
+  async updateById(id: string, status: TaskStatus, user: User): Promise<Task> {
+    const task = await this.getById(id, user);
     task.status = status;
     await this.repo.save(task);
     return task;

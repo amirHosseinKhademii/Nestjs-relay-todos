@@ -29,8 +29,11 @@ export class TasksController {
   }
 
   @Get('/:id')
-  get(@Param('id') id: string): Promise<Task> | undefined {
-    return this.service.getById(id);
+  get(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<Task> | undefined {
+    return this.service.getById(id, user);
   }
 
   @Get()
@@ -42,15 +45,16 @@ export class TasksController {
   }
 
   @Delete('/:id')
-  remove(@Param('id') id: string): void {
-    this.service.removeById(id);
+  remove(@Param('id') id: string, @GetUser() user: User): void {
+    this.service.removeById(id, user);
   }
 
   @Patch('/:id')
   update(
     @Param('id') id: string,
     @Body() { status }: { status: TaskStatus },
+    @GetUser() user: User,
   ): Promise<Task> {
-    return this.service.updateById(id, status);
+    return this.service.updateById(id, status, user);
   }
 }
