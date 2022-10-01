@@ -12,6 +12,11 @@ export class StudentsReolver {
     return this.service.getAll();
   }
 
+  @Query((returns) => StudentType)
+  student(@Args('id') id: string) {
+    return this.service.getById(id);
+  }
+
   @Mutation((returns) => StudentType)
   createStudent(@Args('createStudent') body: CreateStudentInput) {
     return this.service.create(body);

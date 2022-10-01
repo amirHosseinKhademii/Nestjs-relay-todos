@@ -12,6 +12,10 @@ export class StudentsService {
     return await this.repo.find();
   }
 
+  async getById(id: string) {
+    return await this.repo.findOneBy({ id });
+  }
+
   async create(body: CreateStudentInput) {
     const student = await this.repo.create({ ...body, id: uuid() });
     return await this.repo.save(student);
