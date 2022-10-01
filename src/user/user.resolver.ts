@@ -1,5 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateUserInput } from './inputs/create-user.input';
+import { SigninUserInput } from './inputs/signin-user.input';
 import { UserService } from './user.service';
 import { UserType } from './user.type';
 
@@ -13,7 +14,12 @@ export class UserResolver {
   }
 
   @Mutation((returns) => String)
-  signUp(@Args('SignUp') body: CreateUserInput) {
+  signUp(@Args('signupInput') body: CreateUserInput) {
     return this.service.createUser(body);
+  }
+
+  @Mutation((returns) => String)
+  signIn(@Args('signinInput') body: SigninUserInput) {
+    return this.service.signin(body);
   }
 }
