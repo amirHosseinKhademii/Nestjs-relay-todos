@@ -1,0 +1,38 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  userName: String!
+  fullName: String!
+  password: String!
+}
+
+type Todo {
+  id: ID!
+  title: String!
+  description: String!
+  user: User!
+}
+
+type Query {
+  users: [User!]!
+  todos: [Todo!]!
+}
+
+type Mutation {
+  signUp(signupInput: CreateUserInput!): String!
+  signIn(signinInput: SigninUserInput!): String!
+}
+
+input CreateUserInput {
+  userName: String!
+  fullName: String!
+  password: String!
+}
+
+input SigninUserInput {
+  userName: String!
+  password: String!
+}

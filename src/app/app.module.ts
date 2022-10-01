@@ -4,6 +4,9 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
 import { User } from 'src/user/user.entity';
+import { TodoModule } from 'src/todo/todo.module';
+import { Todo } from 'src/todo/todo.entity';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -12,13 +15,14 @@ import { User } from 'src/user/user.entity';
       url: 'mongodb://localhost/todos',
       synchronize: true,
       useUnifiedTopology: true,
-      entities: [User],
+      entities: [User, Todo],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
-      autoSchemaFile: true,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       driver: ApolloDriver,
     }),
     UserModule,
+    TodoModule,
   ],
 })
 export class AppModule {}
