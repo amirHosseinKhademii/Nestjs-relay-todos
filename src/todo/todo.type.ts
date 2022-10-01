@@ -12,6 +12,6 @@ export class TodoType {
   @Field()
   description: string;
 
-  @Field((type) => UserType)
+  @Field((type) => UserType, { nullable: true })
   user: string;
 }

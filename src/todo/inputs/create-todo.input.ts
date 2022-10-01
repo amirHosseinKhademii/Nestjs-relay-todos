@@ -1,6 +1,7 @@
-import { Field, ID } from '@nestjs/graphql';
+import { Field, ID, InputType } from '@nestjs/graphql';
 import { IsNotEmpty, IsString, IsUUID, MinLength } from 'class-validator';
 
+@InputType()
 export class CreateTodoInput {
   @IsString()
   @IsNotEmpty()
@@ -13,11 +14,4 @@ export class CreateTodoInput {
   @MinLength(2)
   @Field()
   description: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(2)
-  @IsUUID('4', { each: true })
-  @Field((type) => ID)
-  user: string;
 }
