@@ -1,5 +1,4 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { StudentType } from 'src/students/student.type';
 import { Todo } from 'src/todo/todo.entity';
 import { TodoType } from 'src/todo/todo.type';
 
