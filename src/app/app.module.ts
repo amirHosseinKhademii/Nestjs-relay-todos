@@ -1,27 +1,24 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { LessonsModule } from 'src/lessons/lessons.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Lesson } from '../lessons/lesson.entity';
-import { StudentsModule } from 'src/students/students.module';
-import { Student } from 'src/students/student.entity';
+import { UserModule } from 'src/user/user.module';
+import { User } from 'src/user/user.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      url: 'mongodb://localhost/school',
+      url: 'mongodb://localhost/todos',
       synchronize: true,
       useUnifiedTopology: true,
-      entities: [Lesson, Student],
+      entities: [User],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
       driver: ApolloDriver,
     }),
-    LessonsModule,
-    StudentsModule,
+    UserModule,
   ],
 })
 export class AppModule {}
