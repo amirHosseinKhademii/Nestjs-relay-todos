@@ -17,5 +17,6 @@ import { JwtStrategy } from './utils/jwt-strategy';
     }),
   ],
   providers: [UserService, UserResolver, JwtStrategy],
+  exports: [JwtStrategy, PassportModule],
 })
 export class UserModule {}
