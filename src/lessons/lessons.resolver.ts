@@ -19,7 +19,7 @@ export class LessonsResolver {
   }
 
   @Mutation((returns) => LessonType)
-  create(@Args('create') body: CreateLessonInput): Promise<Lesson> {
+  createLesson(@Args('createLesson') body: CreateLessonInput): Promise<Lesson> {
     return this.service.createLesson(body);
   }
 }

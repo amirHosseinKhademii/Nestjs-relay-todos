@@ -9,5 +9,8 @@ export class Student {
   id: string;
 
   @Column()
-  name: string;
+  firstName: string;
+
+  @Column()
+  lastName: string;
 }
