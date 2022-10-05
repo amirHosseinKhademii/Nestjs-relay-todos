@@ -1,10 +1,7 @@
-import { Todo } from 'src/todo/todo.entity';
 import {
   Column,
   Entity,
   ObjectIdColumn,
-  OneToMany,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
