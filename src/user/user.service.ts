@@ -25,6 +25,10 @@ export class UserService {
     return await this.repo.find();
   }
 
+  async getUser(id: string) {
+    return await this.repo.findOneBy({ id });
+  }
+
   async createUser(body: CreateUserInput) {
     const hashed = await hasher(body.password);
     const user = await this.repo.create({

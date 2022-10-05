@@ -21,6 +21,6 @@ export class Todo {
   @Column({ default: '' })
   description: string;
 
-  @ManyToOne(() => User, (user) => user.id, { eager: true })
+  @Column()
   user: string;
 }

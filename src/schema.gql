@@ -19,6 +19,7 @@ type User {
 
 type Query {
   users: [User!]!
+  user(userId: String!): User!
   todos: [Todo!]!
 }
 

@@ -13,6 +13,11 @@ export class UserResolver {
     return this.service.getUsers();
   }
 
+  @Query((returns) => UserType)
+  user(@Args('userId') id: string) {
+    return this.service.getUser(id);
+  }
+
   @Mutation((returns) => String)
   signUp(@Args('signupInput') body: CreateUserInput) {
     return this.service.createUser(body);
