@@ -2,19 +2,19 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Todo {
-  id: ID!
-  title: String!
-  description: String!
-  user: User
-}
-
 type User {
   id: ID!
   userName: String!
   fullName: String!
   password: String!
   todos: [Todo!]
+}
+
+type Todo {
+  id: ID!
+  title: String!
+  description: String!
+  user: User
 }
 
 type Query {

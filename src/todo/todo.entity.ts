@@ -21,6 +21,6 @@ export class Todo {
   @Column({ default: '' })
   description: string;
 
-  @Column()
+  @Column({ default: [] })
   user: string;
 }

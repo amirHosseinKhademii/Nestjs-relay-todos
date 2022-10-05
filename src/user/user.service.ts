@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -13,6 +14,7 @@ import { hasher } from './utils/hasher';
 import { SigninUserInput } from './inputs/signin-user.input';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
 export class UserService {
@@ -35,6 +37,7 @@ export class UserService {
       ...body,
       password: hashed,
       id: uuid(),
+      todos: [],
     });
     try {
       await this.repo.save(user);
@@ -51,5 +54,12 @@ export class UserService {
     if (user && (await bcrypt.compare(password, user.password)))
       return await this.jwt.sign({ userName });
     else throw new UnauthorizedException('Check your credentials.');
+  }
+
+  @UseGuards(AuthGuard())
+  async addTodo(userId: string, todoId: string) {
+    const user = await this.repo.findOneBy({ id: userId });
+    user.todos = [...user.todos, todoId];
+    return await this.repo.save(user);
   }
 }
