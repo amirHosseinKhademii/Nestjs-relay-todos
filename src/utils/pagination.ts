@@ -1,4 +1,5 @@
 import { PaginationArgs } from 'src/args/paginattion.args';
+import { FindManyOptionsCustom } from './pagination.types';
 
 export function paginateResponse(data, page, limit) {
   const [result, total] = data;
@@ -15,7 +16,9 @@ export function paginateResponse(data, page, limit) {
   };
 }
 
-export const mdbPaginationOptionCreator = (args: PaginationArgs) => {
+export const mdbPaginationOptionCreator = <T extends any>(
+  args: PaginationArgs,
+): FindManyOptionsCustom<T> => {
   const { start_date, end_date, page, limit } = args || {};
   const take = limit || 10;
   const pages = page || 1;
@@ -32,7 +35,7 @@ export const mdbPaginationOptionCreator = (args: PaginationArgs) => {
   const order = {
     created_at: 'DESC',
   };
-  const options: any = args
+  const options: FindManyOptionsCustom<T> = args
     ? {
         where,
         take,

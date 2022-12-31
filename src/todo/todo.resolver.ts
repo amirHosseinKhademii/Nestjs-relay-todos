@@ -22,8 +22,8 @@ export class TodoResolver {
   constructor(private service: TodoService, private userService: UserService) {}
 
   @Query((returns) => TodoResponseGQL)
-  todos(@Args() args: GetTodosArgs) {
-    return this.service.getAllTodos(args);
+  todos(@Args() args: GetTodosArgs, @GetUser() user: User) {
+    return this.service.getAllTodos(args, user);
   }
 
   @Mutation((returns) => TodoGQL)

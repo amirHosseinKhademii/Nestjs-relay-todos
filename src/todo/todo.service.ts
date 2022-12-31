@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Todo } from './typeorm';
 import { v4 as uuid } from 'uuid';
-import { User } from 'src/user/typeorm/user.entity';
+import { User } from 'src/user/typeorm';
 import { UserService } from 'src/user/user.service';
 import { mdbPaginationOptionCreator, paginateResponse } from 'src/utils';
 import { GetTodosArgs, CreateTodoArgs } from './args';
@@ -15,8 +15,12 @@ export class TodoService {
     @Inject(forwardRef(() => UserService)) private userService: UserService,
   ) {}
 
-  async getAllTodos(args: GetTodosArgs) {
-    const options = mdbPaginationOptionCreator(args);
+  async getAllTodos(args: GetTodosArgs, user: User) {
+    const paginationOptions = mdbPaginationOptionCreator<Todo>(args);
+    const options = {
+      ...paginationOptions,
+      where: { ...paginationOptions.where, user: user.id },
+    };
     const data = await this.repo.findAndCount(options);
     return paginateResponse(data, args.page, args.limit);
   }
