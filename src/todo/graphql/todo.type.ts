@@ -9,7 +9,7 @@ export class TodoGQL {
   @Field()
   title: string;
 
-  @Field()
+  @Field({ nullable: true })
   description: string;
 
   @Field((type) => UserGQL, { nullable: true })

@@ -1,5 +1,5 @@
 import { ArgsType, Field } from '@nestjs/graphql';
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 @ArgsType()
 export class CreateTodoArgs {
@@ -9,9 +9,9 @@ export class CreateTodoArgs {
   @Field()
   title: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   @MinLength(2)
-  @Field()
+  @Field({ nullable: true })
   description: string;
 }
