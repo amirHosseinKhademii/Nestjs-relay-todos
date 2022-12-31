@@ -12,6 +12,9 @@ export class TodoGQL {
   @Field({ nullable: true })
   description: string;
 
+  @Field({ nullable: true })
+  isCompleted: boolean;
+
   @Field((type) => UserGQL, { nullable: true })
   user: string;
 

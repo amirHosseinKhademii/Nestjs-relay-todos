@@ -9,7 +9,7 @@ import {
 
 @Entity()
 export class Todo {
-  @ObjectIdColumn()
+  @ObjectIdColumn({ update: false })
   _id: string;
 
   @PrimaryGeneratedColumn('uuid')
@@ -21,10 +21,13 @@ export class Todo {
   @Column({ default: '' })
   description: string;
 
-  @Column({ default: [] })
+  @Column({ default: [], update: false })
   user: string;
 
-  @CreateDateColumn()
+  @Column({ default: false })
+  isCompleted: boolean;
+
+  @CreateDateColumn({ update: false })
   created_at: Date;
 
   @UpdateDateColumn()

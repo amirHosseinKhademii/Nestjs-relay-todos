@@ -7,6 +7,7 @@ import { User } from 'src/user/typeorm';
 import { UserService } from 'src/user/user.service';
 import { mdbPaginationOptionCreator, paginateResponse } from 'src/utils';
 import { GetTodosArgs, CreateTodoArgs } from './args';
+import { UpdateTodoArgs } from './args/update-todo.args';
 
 @Injectable()
 export class TodoService {
@@ -39,5 +40,12 @@ export class TodoService {
     });
     this.userService.addTodo(user.id, id);
     return await this.repo.save(todo);
+  }
+
+  async updateTodo(args: UpdateTodoArgs) {
+    const { id, ...body } = args;
+    const updated_at = new Date();
+    const todo = await this.repo.update({ id }, { ...body, updated_at });
+    return todo?.raw?.acknowledged ?? false;
   }
 }

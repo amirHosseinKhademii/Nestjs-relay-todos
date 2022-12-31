@@ -15,6 +15,7 @@ import { CreateTodoArgs, GetTodosArgs } from './args';
 import { Todo } from './typeorm';
 import { TodoResponseGQL, TodoGQL } from './graphql';
 import { TodoService } from './todo.service';
+import { UpdateTodoArgs } from './args/update-todo.args';
 
 @Resolver((of) => TodoGQL)
 @UseGuards(new AuthGraphGuard())
@@ -29,6 +30,11 @@ export class TodoResolver {
   @Mutation((returns) => TodoGQL)
   addTodo(@Args() body: CreateTodoArgs, @GetUser() user: User) {
     return this.service.createTodo(body, user);
+  }
+
+  @Mutation((returns) => Boolean)
+  updateTodo(@Args() args: UpdateTodoArgs) {
+    return this.service.updateTodo(args);
   }
 
   @ResolveField()
