@@ -6,8 +6,7 @@ import { v4 as uuid } from 'uuid';
 import { User } from 'src/user/typeorm';
 import { UserService } from 'src/user/user.service';
 import { mdbPaginationOptionCreator, paginateResponse } from 'src/utils';
-import { GetTodosArgs, CreateTodoArgs } from './args';
-import { UpdateTodoArgs } from './args/update-todo.args';
+import { GetTodosArgs, CreateTodoArgs, UpdateTodoArgs } from './args';
 
 @Injectable()
 export class TodoService {
