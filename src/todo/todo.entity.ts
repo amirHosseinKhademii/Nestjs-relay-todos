@@ -1,10 +1,10 @@
-import { User } from 'src/user/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
-  ManyToOne,
   ObjectIdColumn,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -23,4 +23,10 @@ export class Todo {
 
   @Column({ default: [] })
   user: string;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

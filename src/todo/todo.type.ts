@@ -14,4 +14,10 @@ export class TodoType {
 
   @Field((type) => UserType, { nullable: true })
   user: string;
+
+  @Field()
+  created_at: Date;
+
+  @Field({ nullable: true })
+  updated_at: Date;
 }

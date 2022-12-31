@@ -24,7 +24,11 @@ export class TodoService {
 
   async createTodo(body: CreateTodoInput, user: User) {
     const id = uuid();
-    const todo = await this.repo.create({ ...body, user: user.id, id });
+    const todo = await this.repo.create({
+      ...body,
+      user: user.id,
+      id,
+    });
     this.userService.addTodo(user.id, id);
     return await this.repo.save(todo);
   }
