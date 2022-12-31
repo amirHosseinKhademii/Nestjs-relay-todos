@@ -57,4 +57,5 @@ type Mutation {
   signIn(userName: String!, password: String!): String!
   addTodo(title: String!, description: String): Todo!
   updateTodo(id: String!, title: String, description: String, isCompleted: Boolean): Boolean!
+  deleteTodo(id: String!): Boolean!
 }

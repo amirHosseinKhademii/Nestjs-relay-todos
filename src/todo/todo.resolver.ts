@@ -37,6 +37,11 @@ export class TodoResolver {
     return this.service.updateTodo(args);
   }
 
+  @Mutation(() => Boolean)
+  deleteTodo(@Args('id') id: string) {
+    return this.service.deleteTodo(id);
+  }
+
   @ResolveField()
   user(@Parent() todo: Todo) {
     return this.userService.getUser(todo.user);

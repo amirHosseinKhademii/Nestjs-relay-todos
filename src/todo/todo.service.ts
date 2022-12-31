@@ -48,4 +48,9 @@ export class TodoService {
     const todo = await this.repo.update({ id }, { ...body, updated_at });
     return todo?.raw?.acknowledged ?? false;
   }
+
+  async deleteTodo(id: string) {
+    const result = await this.repo.delete({ id });
+    return result?.raw?.acknowledged ?? false;
+  }
 }
