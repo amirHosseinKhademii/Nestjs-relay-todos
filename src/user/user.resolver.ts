@@ -8,40 +8,40 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { TodoService } from 'src/todo/todo.service';
-import { CreateUserInput } from './inputs/create-user.input';
-import { SigninUserInput } from './inputs/signin-user.input';
+import { CreateUserArgs } from './args/signup-user.args';
+import { SigninUserArgs } from './args/signin-user.args';
 import { UserService } from './user.service';
-import { UserType } from './user.type';
+import { UserGQL } from './graphql/user.type';
 
-@Resolver((of) => UserType)
+@Resolver((of) => UserGQL)
 export class UserResolver {
   constructor(
     private service: UserService,
     @Inject(forwardRef(() => TodoService)) private todoService: TodoService,
   ) {}
 
-  @Query((returns) => [UserType])
+  @Query((returns) => [UserGQL])
   users() {
     return this.service.getUsers();
   }
 
-  @Query((returns) => UserType)
+  @Query((returns) => UserGQL)
   user(@Args('userId') id: string) {
     return this.service.getUser(id);
   }
 
   @Mutation((returns) => String)
-  signUp(@Args('signupInput') body: CreateUserInput) {
+  signUp(@Args() body: CreateUserArgs) {
     return this.service.createUser(body);
   }
 
   @Mutation((returns) => String)
-  signIn(@Args('signinInput') body: SigninUserInput) {
+  signIn(@Args() body: SigninUserArgs) {
     return this.service.signin(body);
   }
 
   @ResolveField()
-  todos(@Parent() user: UserType) {
+  todos(@Parent() user: UserGQL) {
     return this.todoService.getTodosByIds(user.todos);
   }
 }

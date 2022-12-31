@@ -7,11 +7,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserInput } from './inputs/create-user.input';
-import { User } from './user.entity';
+import { CreateUserArgs } from './args/signup-user.args';
+import { User } from './typeorm/user.entity';
 import { v4 as uuid } from 'uuid';
 import { hasher } from './utils/hasher';
-import { SigninUserInput } from './inputs/signin-user.input';
+import { SigninUserArgs } from './args/signin-user.args';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { AuthGuard } from '@nestjs/passport';
@@ -31,7 +31,7 @@ export class UserService {
     return await this.repo.findOneBy({ id });
   }
 
-  async createUser(body: CreateUserInput) {
+  async createUser(body: CreateUserArgs) {
     const hashed = await hasher(body.password);
     const user = await this.repo.create({
       ...body,
@@ -49,7 +49,7 @@ export class UserService {
     }
   }
 
-  async signin({ userName, password }: SigninUserInput): Promise<string> {
+  async signin({ userName, password }: SigninUserArgs): Promise<string> {
     const user = await this.repo.findOneBy({ userName });
     if (user && (await bcrypt.compare(password, user.password)))
       return await this.jwt.sign({ userName });

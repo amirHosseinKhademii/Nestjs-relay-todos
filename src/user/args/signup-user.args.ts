@@ -1,8 +1,8 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { ArgsType, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
-@InputType()
-export class CreateUserInput {
+@ArgsType()
+export class CreateUserArgs {
   @Field()
   @IsString()
   @IsNotEmpty()

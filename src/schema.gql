@@ -24,35 +24,35 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type TodoResponse {
+  data: [Todo!]!
+  count: Float
+  currentPage: Float
+  nextPage: Float
+  prevPage: Float
+  lastPage: Float
+}
+
 type Query {
   users: [User!]!
   user(userId: String!): User!
-  todos(getTodosQuery: GetTodosQuery): [Todo!]!
-}
+  todos(
+    """Paginate first"""
+    page: Float
 
-input GetTodosQuery {
-  from: String!
-  until: String!
+    """Paginate last"""
+    limit: Float
+
+    """Starting date"""
+    start_date: String
+
+    """Ending date"""
+    end_date: String
+  ): TodoResponse!
 }
 
 type Mutation {
-  signUp(signupInput: CreateUserInput!): String!
-  signIn(signinInput: SigninUserInput!): String!
-  createTodo(createTodoInput: CreateTodoInput!): Todo!
-}
-
-input CreateUserInput {
-  userName: String!
-  fullName: String!
-  password: String!
-}
-
-input SigninUserInput {
-  userName: String!
-  password: String!
-}
-
-input CreateTodoInput {
-  title: String!
-  description: String!
+  signUp(userName: String!, fullName: String!, password: String!): String!
+  signIn(userName: String!, password: String!): String!
+  addTodo(title: String!, description: String!): Todo!
 }

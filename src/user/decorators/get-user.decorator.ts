@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { User } from '../user.entity';
+import { User } from '../typeorm/user.entity';
 
 export const GetUser = createParamDecorator(
   (_, context: ExecutionContext): User => {

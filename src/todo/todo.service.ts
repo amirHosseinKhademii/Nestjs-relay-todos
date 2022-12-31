@@ -1,12 +1,14 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThan, Repository } from 'typeorm';
-import { CreateTodoInput } from './inputs/create-todo.input';
-import { Todo } from './todo.entity';
+import { Repository } from 'typeorm';
+import { Todo } from './typeorm/todo.entity';
 import { v4 as uuid } from 'uuid';
-import { User } from 'src/user/user.entity';
+import { User } from 'src/user/typeorm/user.entity';
 import { UserService } from 'src/user/user.service';
-import { GetTodosQuery } from './inputs/get-todos.query';
+import { paginateResponse } from 'src/utils/pagination';
+import { GetTodosArgs } from './args/get-todos.args';
+import { CreateTodoArgs } from './args/create-todo.args';
+
 @Injectable()
 export class TodoService {
   constructor(
@@ -14,18 +16,33 @@ export class TodoService {
     @Inject(forwardRef(() => UserService)) private userService: UserService,
   ) {}
 
-  async getAllTodos(query: GetTodosQuery) {
-    const options: any = query
-      ? {
-          where: {
+  async getAllTodos(args: GetTodosArgs) {
+    const { start_date, end_date, page, limit } = args || {};
+    const take = limit || 10;
+    const pages = page || 1;
+    const skip = (pages - 1) * take;
+    const where =
+      start_date && end_date
+        ? {
             created_at: {
-              $gte: new Date(query?.from),
-              $lt: new Date(query?.until),
+              $gte: new Date(start_date),
+              $lt: new Date(end_date),
             },
-          },
+          }
+        : {};
+    const order = {
+      created_at: 'DESC',
+    };
+    const options: any = args
+      ? {
+          where,
+          take,
+          skip,
+          order,
         }
       : {};
-    return this.repo.find(options);
+    const data = await this.repo.findAndCount(options);
+    return paginateResponse(data, page, limit);
   }
 
   async getTodosByIds(ids: string[]) {
@@ -33,7 +50,7 @@ export class TodoService {
     return await this.repo.find(options);
   }
 
-  async createTodo(body: CreateTodoInput, user: User) {
+  async createTodo(body: CreateTodoArgs, user: User) {
     const id = uuid();
     const todo = await this.repo.create({
       ...body,

@@ -3,9 +3,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
-import { User } from 'src/user/user.entity';
+import { User } from 'src/user/typeorm/user.entity';
 import { TodoModule } from 'src/todo/todo.module';
-import { Todo } from 'src/todo/todo.entity';
+import { Todo } from 'src/todo/typeorm/todo.entity';
 import { join } from 'path';
 
 @Module({
