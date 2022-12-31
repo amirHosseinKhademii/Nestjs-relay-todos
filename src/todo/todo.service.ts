@@ -1,11 +1,12 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { CreateTodoInput } from './inputs/create-todo.input';
 import { Todo } from './todo.entity';
 import { v4 as uuid } from 'uuid';
 import { User } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
+import { GetTodosQuery } from './inputs/get-todos.query';
 @Injectable()
 export class TodoService {
   constructor(
@@ -13,8 +14,18 @@ export class TodoService {
     @Inject(forwardRef(() => UserService)) private userService: UserService,
   ) {}
 
-  async getAllTodos() {
-    return this.repo.find({ relations: { user: true } });
+  async getAllTodos(query: GetTodosQuery) {
+    const options: any = query
+      ? {
+          where: {
+            created_at: {
+              $gte: new Date(query?.from),
+              $lt: new Date(query?.until),
+            },
+          },
+        }
+      : {};
+    return this.repo.find(options);
   }
 
   async getTodosByIds(ids: string[]) {

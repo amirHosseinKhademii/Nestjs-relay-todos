@@ -12,6 +12,7 @@ import { AuthGraphGuard } from 'src/user/guards/auth-graph.guard';
 import { User } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
 import { CreateTodoInput } from './inputs/create-todo.input';
+import { GetTodosQuery } from './inputs/get-todos.query';
 import { Todo } from './todo.entity';
 import { TodoService } from './todo.service';
 import { TodoType } from './todo.type';
@@ -22,8 +23,8 @@ export class TodoResolver {
   constructor(private service: TodoService, private userService: UserService) {}
 
   @Query((returns) => [TodoType])
-  todos() {
-    return this.service.getAllTodos();
+  todos(@Args('getTodosQuery', { nullable: true }) query: GetTodosQuery) {
+    return this.service.getAllTodos(query);
   }
 
   @Mutation((returns) => TodoType)

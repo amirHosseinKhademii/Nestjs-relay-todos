@@ -27,7 +27,12 @@ scalar DateTime
 type Query {
   users: [User!]!
   user(userId: String!): User!
-  todos: [Todo!]!
+  todos(getTodosQuery: GetTodosQuery): [Todo!]!
+}
+
+input GetTodosQuery {
+  from: String!
+  until: String!
 }
 
 type Mutation {
