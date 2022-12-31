@@ -8,10 +8,9 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { TodoService } from 'src/todo/todo.service';
-import { CreateUserArgs } from './args/signup-user.args';
-import { SigninUserArgs } from './args/signin-user.args';
+import { CreateUserArgs, SigninUserArgs } from './args';
 import { UserService } from './user.service';
-import { UserGQL } from './graphql/user.type';
+import { UserGQL } from './graphql';
 
 @Resolver((of) => UserGQL)
 export class UserResolver {

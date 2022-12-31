@@ -3,7 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TodoModule } from 'src/todo/todo.module';
-import { User } from './typeorm/user.entity';
+import { User } from './typeorm';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 import { JwtStrategy } from './utils/jwt-strategy';

@@ -1,13 +1,12 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Todo } from './typeorm/todo.entity';
+import { Todo } from './typeorm';
 import { v4 as uuid } from 'uuid';
 import { User } from 'src/user/typeorm/user.entity';
 import { UserService } from 'src/user/user.service';
-import { paginateResponse } from 'src/utils/pagination';
-import { GetTodosArgs } from './args/get-todos.args';
-import { CreateTodoArgs } from './args/create-todo.args';
+import { mdbPaginationOptionCreator, paginateResponse } from 'src/utils';
+import { GetTodosArgs, CreateTodoArgs } from './args';
 
 @Injectable()
 export class TodoService {
@@ -17,32 +16,9 @@ export class TodoService {
   ) {}
 
   async getAllTodos(args: GetTodosArgs) {
-    const { start_date, end_date, page, limit } = args || {};
-    const take = limit || 10;
-    const pages = page || 1;
-    const skip = (pages - 1) * take;
-    const where =
-      start_date && end_date
-        ? {
-            created_at: {
-              $gte: new Date(start_date),
-              $lt: new Date(end_date),
-            },
-          }
-        : {};
-    const order = {
-      created_at: 'DESC',
-    };
-    const options: any = args
-      ? {
-          where,
-          take,
-          skip,
-          order,
-        }
-      : {};
+    const options = mdbPaginationOptionCreator(args);
     const data = await this.repo.findAndCount(options);
-    return paginateResponse(data, page, limit);
+    return paginateResponse(data, args.page, args.limit);
   }
 
   async getTodosByIds(ids: string[]) {

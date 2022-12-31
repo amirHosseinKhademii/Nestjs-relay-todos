@@ -7,11 +7,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserArgs } from './args/signup-user.args';
-import { User } from './typeorm/user.entity';
+import { CreateUserArgs, SigninUserArgs } from './args';
+import { User } from './typeorm';
 import { v4 as uuid } from 'uuid';
-import { hasher } from './utils/hasher';
-import { SigninUserArgs } from './args/signin-user.args';
+import { hasher } from './utils';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { AuthGuard } from '@nestjs/passport';

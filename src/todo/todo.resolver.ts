@@ -7,18 +7,14 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { GetUser } from 'src/user/decorators/get-user.decorator';
-import { AuthGraphGuard } from 'src/user/guards/auth-graph.guard';
-import { User } from 'src/user/typeorm/user.entity';
+import { GetUser } from 'src/user/decorators';
+import { AuthGraphGuard } from 'src/user/guards';
+import { User } from 'src/user/typeorm';
 import { UserService } from 'src/user/user.service';
-import { CreateTodoArgs } from './args/create-todo.args';
-import { GetTodosArgs } from './args/get-todos.args';
-
-import { Todo } from './typeorm/todo.entity';
-import { TodoResponseGQL } from './graphql/todo.response';
-
+import { CreateTodoArgs, GetTodosArgs } from './args';
+import { Todo } from './typeorm';
+import { TodoResponseGQL, TodoGQL } from './graphql';
 import { TodoService } from './todo.service';
-import { TodoGQL } from './graphql/todo.type';
 
 @Resolver((of) => TodoGQL)
 @UseGuards(new AuthGraphGuard())
