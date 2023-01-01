@@ -44,6 +44,7 @@ export class TodoService {
   async updateTodo(args: UpdateTodoArgs) {
     const { id, ...body } = args;
     const updated_at = new Date();
+    Object.keys(body).forEach((key) => body[key] === null && delete body[key]);
     const todo = await this.repo.update({ id }, { ...body, updated_at });
     return todo?.raw?.acknowledged ?? false;
   }
