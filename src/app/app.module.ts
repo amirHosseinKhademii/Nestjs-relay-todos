@@ -7,6 +7,8 @@ import { User } from 'src/user/typeorm/user.entity';
 import { TodoModule } from 'src/todo/todo.module';
 import { Todo } from 'src/todo/typeorm/todo.entity';
 import { join } from 'path';
+import { CardModule } from 'src/card/card.module';
+import { Card } from 'src/card/types/card.types';
 
 @Module({
   imports: [
@@ -15,14 +17,15 @@ import { join } from 'path';
       url: 'mongodb://localhost/todos',
       synchronize: true,
       useUnifiedTopology: true,
-      entities: [User, Todo],
+      entities: [Card],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       driver: ApolloDriver,
     }),
-    UserModule,
-    TodoModule,
+    // UserModule,
+    // TodoModule,
+    CardModule,
   ],
 })
 export class AppModule {}
