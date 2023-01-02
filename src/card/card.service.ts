@@ -6,7 +6,7 @@ import { connectionFromArraySlice } from 'graphql-relay';
 import { ConnectionArgs, getPagingParameters } from 'src/relay/connection.args';
 import { CardCreateArgs } from './types/card.create.args';
 import { v4 as uuid } from 'uuid';
-import { CardResponse } from './types/card.response';
+import { CardResponse, UserResponse } from './types/card.response';
 
 @Injectable()
 export class CardService {
@@ -27,5 +27,11 @@ export class CardService {
   async addCard(args: CardCreateArgs): Promise<Card> {
     const card = await this.repo.create({ ...args, id: uuid() });
     return await this.repo.save(card);
+  }
+
+  async findUser(args: ConnectionArgs) {
+    return {
+      name: 'Test',
+    };
   }
 }
