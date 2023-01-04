@@ -23,6 +23,10 @@ export class Card implements NodeInterface {
   @Field()
   @Column()
   title: string;
+
+  @Field({ nullable: true, defaultValue: '' })
+  @Column({ nullable: true, default: '' })
+  description?: string;
 }
 
 @ObjectType()

@@ -8,4 +8,8 @@ export class CardCreateArgs {
   @MinLength(2)
   @Field()
   title: string;
+
+  @IsOptional()
+  @Field({ nullable: true, defaultValue: '' })
+  description?: string;
 }

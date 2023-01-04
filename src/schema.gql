@@ -9,6 +9,7 @@ interface Node {
 type Card implements Node {
   id: ID!
   title: String!
+  description: String
 }
 
 type CardResponse {
@@ -34,5 +35,5 @@ type Query {
 }
 
 type Mutation {
-  addCard(title: String!): Card!
+  addCard(title: String!, description: String = ""): Card!
 }
