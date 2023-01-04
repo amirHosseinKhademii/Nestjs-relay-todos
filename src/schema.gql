@@ -7,24 +7,7 @@ type Card {
   title: String!
 }
 
-type UserResponse {
-  name: String!
-  userCards(
-    """Paginate before opaque cursor"""
-    before: String
-
-    """Paginate after opaque cursor"""
-    after: String
-
-    """Paginate first"""
-    first: Float
-
-    """Paginate last"""
-    last: Float
-  ): CardConnection!
-}
-
-type CardConnection {
+type CardResponse {
   edges: [CardEdge!]
   pageInfo: CardPageInfo
 }
@@ -42,19 +25,8 @@ type CardPageInfo {
 }
 
 type Query {
-  users(
-    """Paginate before opaque cursor"""
-    before: String
-
-    """Paginate after opaque cursor"""
-    after: String
-
-    """Paginate first"""
-    first: Float
-
-    """Paginate last"""
-    last: Float
-  ): UserResponse!
+  cards(before: String, after: String, first: Float, last: Float, query: String): CardResponse!
+  node(id: String!): Card!
 }
 
 type Mutation {

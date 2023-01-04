@@ -9,6 +9,9 @@ import { Todo } from 'src/todo/typeorm/todo.entity';
 import { join } from 'path';
 import { CardModule } from 'src/card/card.module';
 import { Card } from 'src/card/types/card.types';
+//import { NodeResolver } from './node.resolver';
+import { GlobalIdScalar } from 'nestjs-relay';
+// import { NodeResolver } from './node.resolver';
 
 @Module({
   imports: [
@@ -27,5 +30,6 @@ import { Card } from 'src/card/types/card.types';
     // TodoModule,
     CardModule,
   ],
+  // providers: [GlobalIdScalar],
 })
 export class AppModule {}

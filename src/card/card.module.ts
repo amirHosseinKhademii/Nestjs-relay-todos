@@ -7,5 +7,6 @@ import { Card } from './types/card.types';
 @Module({
   imports: [TypeOrmModule.forFeature([Card])],
   providers: [CardService, CardResolver],
+  exports: [CardService],
 })
 export class CardModule {}

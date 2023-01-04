@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Card } from './types/card.types';
+import { Card, CardResponse } from './types/card.types';
 import { connectionFromArraySlice } from 'graphql-relay';
 import { ConnectionArgs, getPagingParameters } from 'src/relay/connection.args';
 import { CardCreateArgs } from './types/card.create.args';
 import { v4 as uuid } from 'uuid';
-import { CardResponse, UserResponse } from './types/card.response';
+import { ID } from '@nestjs/graphql';
+import { ResolvedGlobalId } from 'nestjs-relay';
+import { fromGlobalId, toGlobalId } from 'graphql-relay';
 
 @Injectable()
 export class CardService {
@@ -14,24 +16,31 @@ export class CardService {
 
   async findAllCards(args: ConnectionArgs): Promise<CardResponse> {
     const { limit, offset } = getPagingParameters(args);
-    const [teams, count] = await this.repo.findAndCount({
+    const [results, count] = await this.repo.findAndCount({
       take: limit,
       skip: offset,
     });
-    return connectionFromArraySlice(teams, args, {
+
+    return connectionFromArraySlice(results, args, {
       arrayLength: count,
       sliceStart: offset || 0,
     });
   }
 
-  async addCard(args: CardCreateArgs): Promise<Card> {
-    const card = await this.repo.create({ ...args, id: uuid() });
-    return await this.repo.save(card);
+  async findCardById(Id: string) {
+    // const { id } = fromGlobalId(Id as unknown as string);
+
+    return await this.repo.findOneBy({ id: Id });
   }
 
-  async findUser(args: ConnectionArgs) {
-    return {
-      name: 'Test',
-    };
+  async addCard(args: CardCreateArgs): Promise<Card> {
+    const guid = uuid();
+    const id = toGlobalId('Card', guid);
+    const card = await this.repo.create({ ...args, id });
+
+    // const { id: resId } = fromGlobalId(card.id as unknown as string);
+    // console.log({ card, resId, guid });
+
+    return await this.repo.save(card);
   }
 }
