@@ -32,15 +32,15 @@ export class CardResolver {
     return this.service.findAllCards(args);
   }
 
-  @Mutation(() => Card)
-  addCard(@Args() args: CardCreateArgs) {
-    return this.service.addCard(args);
-  }
+  // @Mutation(() => Card)
+  // addCard(@Args() args: CardCreateArgs) {
+  //   return this.service.addCard(args);
+  // }
 
-  @Query(() => Card)
-  node(@Args('id') id: string): Promise<Card> {
-    console.log(id);
+  // @Query(() => Card)
+  // node(@Args('id') id: string): Promise<Card> {
+  //   console.log(id);
 
-    return this.service.findCardById(id);
-  }
+  //   return this.service.findCardById(id);
+  // }
 }

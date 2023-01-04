@@ -1,5 +1,7 @@
 import { Field, ID, ObjectType, InterfaceType } from '@nestjs/graphql';
-import { ResolvedGlobalId } from 'nestjs-relay';
+
+import { NodeInterface } from 'src/app/app.resolver';
+import { NodeType } from 'src/app/node-type.decorator';
 import { relayTypes } from 'src/relay/relay.types';
 import {
   Column,
@@ -8,9 +10,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@ObjectType('Card')
+@NodeType('Card')
 @Entity()
-export class Card {
+export class Card implements NodeInterface {
   @ObjectIdColumn({ update: false })
   _id: string;
 

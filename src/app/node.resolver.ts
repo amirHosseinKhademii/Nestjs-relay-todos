@@ -1,22 +1,23 @@
 // import { Resolver } from '@nestjs/graphql';
-// import {
-//   NodeInterface,
-//   NodeFieldResolver,
-//   ResolvedGlobalId,
-// } from 'nestjs-relay';
-// import { CardService } from 'src/card/card.service';
+import { Resolver } from '@nestjs/graphql';
+import { fromGlobalId } from 'graphql-relay';
 
-// @Resolver(NodeInterface)
-// export class NodeResolver extends NodeFieldResolver {
-//   constructor(private cardService: CardService) {
-//     super();
-//   }
-//   resolveNode(resolvedGlobalId: ResolvedGlobalId) {
-//     switch (resolvedGlobalId.type) {
-//       case 'Card':
-//         return this.cardService.findCardById(resolvedGlobalId.toString());
-//       default:
-//         return null;
-//     }
-//   }
-// }
+import { CardService } from 'src/card/card.service';
+import { NodeInterface } from './app.resolver';
+import { NodeFieldResolver } from './node-field.resolver';
+
+@Resolver(NodeInterface)
+export class NodeResolver extends NodeFieldResolver {
+  constructor(private cardService: CardService) {
+    super();
+  }
+  resolveNode(gid: string) {
+    const { type } = fromGlobalId(gid);
+    switch (type) {
+      case 'Card':
+        return this.cardService.findCardById(gid);
+      default:
+        return null;
+    }
+  }
+}

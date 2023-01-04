@@ -27,20 +27,14 @@ export class CardService {
     });
   }
 
-  async findCardById(Id: string) {
-    // const { id } = fromGlobalId(Id as unknown as string);
-
-    return await this.repo.findOneBy({ id: Id });
+  async findCardById(id: string) {
+    return await this.repo.findOneBy({ id });
   }
 
   async addCard(args: CardCreateArgs): Promise<Card> {
     const guid = uuid();
     const id = toGlobalId('Card', guid);
     const card = await this.repo.create({ ...args, id });
-
-    // const { id: resId } = fromGlobalId(card.id as unknown as string);
-    // console.log({ card, resId, guid });
-
     return await this.repo.save(card);
   }
 }

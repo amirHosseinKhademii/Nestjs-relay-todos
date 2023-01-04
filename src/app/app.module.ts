@@ -11,6 +11,8 @@ import { CardModule } from 'src/card/card.module';
 import { Card } from 'src/card/types/card.types';
 //import { NodeResolver } from './node.resolver';
 import { GlobalIdScalar } from 'nestjs-relay';
+import { AppResolver } from './app.resolver';
+import { NodeResolver } from './node.resolver';
 // import { NodeResolver } from './node.resolver';
 
 @Module({
@@ -30,6 +32,6 @@ import { GlobalIdScalar } from 'nestjs-relay';
     // TodoModule,
     CardModule,
   ],
-  // providers: [GlobalIdScalar],
+  providers: [NodeResolver],
 })
 export class AppModule {}

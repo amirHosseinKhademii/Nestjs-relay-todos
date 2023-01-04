@@ -2,7 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Card {
+interface Node {
+  id: ID!
+}
+
+type Card implements Node {
   id: ID!
   title: String!
 }
@@ -25,10 +29,6 @@ type CardPageInfo {
 }
 
 type Query {
+  node(id: ID!): Node
   cards(before: String, after: String, first: Float, last: Float, query: String): CardResponse!
-  node(id: String!): Card!
-}
-
-type Mutation {
-  addCard(title: String!): Card!
 }
