@@ -37,7 +37,6 @@
     "graphql-relay": "^0.10.0",
     "graphql-tools": "^8.3.6",
     "mongodb": "^4.10.0",
-    "nestjs-relay": "^4.0.4",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "pg": "^8.8.0",

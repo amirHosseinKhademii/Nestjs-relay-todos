@@ -1,21 +1,5 @@
-import {
-  Args,
-  ArgsOptions,
-  ID,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
-import { ResolvedGlobalId } from 'nestjs-relay';
-
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ConnectionArgs } from 'src/relay/connection.args';
-import {
-  GlobalIdFieldResolver,
-  typeResolvedGlobalId,
-} from 'src/relay/global-id-field.resolver';
-import { User } from 'src/user/typeorm';
 import { CardService } from './card.service';
 import { CardCreateArgs } from './types/card.create.args';
 import { Card, CardResponse } from './types/card.types';
@@ -32,10 +16,10 @@ export class CardResolver {
     return this.service.findAllCards(args);
   }
 
-  // @Mutation(() => Card)
-  // addCard(@Args() args: CardCreateArgs) {
-  //   return this.service.addCard(args);
-  // }
+  @Mutation(() => Card)
+  addCard(@Args() args: CardCreateArgs) {
+    return this.service.addCard(args);
+  }
 
   // @Query(() => Card)
   // node(@Args('id') id: string): Promise<Card> {

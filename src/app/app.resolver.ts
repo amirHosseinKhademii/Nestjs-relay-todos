@@ -1,13 +1,13 @@
-import { UseGuards } from '@nestjs/common';
-import { Args, Resolver, Query } from '@nestjs/graphql';
+import {
+  Args,
+  Resolver,
+  Query,
+  Field,
+  InterfaceType,
+  ID,
+} from '@nestjs/graphql';
 
-import { AuthGraphGuard } from 'src/user/guards';
-
-import { Field, InterfaceType, ID } from '@nestjs/graphql';
-
-import { GraphQLID, GraphQLScalarType } from 'graphql';
 import { CardService } from 'src/card/card.service';
-import { Card } from 'src/card/types/card.types';
 
 interface RelayResolvedGlobalId {
   type: string;

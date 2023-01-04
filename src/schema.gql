@@ -32,3 +32,7 @@ type Query {
   node(id: ID!): Node
   cards(before: String, after: String, first: Float, last: Float, query: String): CardResponse!
 }
+
+type Mutation {
+  addCard(title: String!): Card!
+}

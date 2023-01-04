@@ -6,9 +6,7 @@ import { connectionFromArraySlice } from 'graphql-relay';
 import { ConnectionArgs, getPagingParameters } from 'src/relay/connection.args';
 import { CardCreateArgs } from './types/card.create.args';
 import { v4 as uuid } from 'uuid';
-import { ID } from '@nestjs/graphql';
-import { ResolvedGlobalId } from 'nestjs-relay';
-import { fromGlobalId, toGlobalId } from 'graphql-relay';
+import { toGlobalId } from 'graphql-relay';
 
 @Injectable()
 export class CardService {

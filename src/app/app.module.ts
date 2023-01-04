@@ -2,18 +2,10 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from 'src/user/user.module';
-import { User } from 'src/user/typeorm/user.entity';
-import { TodoModule } from 'src/todo/todo.module';
-import { Todo } from 'src/todo/typeorm/todo.entity';
 import { join } from 'path';
 import { CardModule } from 'src/card/card.module';
 import { Card } from 'src/card/types/card.types';
-//import { NodeResolver } from './node.resolver';
-import { GlobalIdScalar } from 'nestjs-relay';
-import { AppResolver } from './app.resolver';
 import { NodeResolver } from './node.resolver';
-// import { NodeResolver } from './node.resolver';
 
 @Module({
   imports: [
