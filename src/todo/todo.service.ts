@@ -1,56 +1,38 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { connectionFromArraySlice, toGlobalId } from 'graphql-relay';
+import { ConnectionArgs, getPagingParameters } from 'src/relay/connection.args';
 import { Repository } from 'typeorm';
-import { Todo } from './typeorm';
+import { TodoCreateArgs } from './types/todo.create.args';
+import { Todo, TodoConnection } from './types/todo.types';
 import { v4 as uuid } from 'uuid';
-import { User } from 'src/user/typeorm';
-import { UserService } from 'src/user/user.service';
-import { mdbPaginationOptionCreator, paginateResponse } from 'src/utils';
-import { GetTodosArgs, CreateTodoArgs, UpdateTodoArgs } from './args';
-
 @Injectable()
 export class TodoService {
-  constructor(
-    @InjectRepository(Todo) private repo: Repository<Todo>,
-    @Inject(forwardRef(() => UserService)) private userService: UserService,
-  ) {}
+  constructor(@InjectRepository(Todo) private repo: Repository<Todo>) {}
 
-  async getAllTodos(args: GetTodosArgs, user: User) {
-    const paginationOptions = mdbPaginationOptionCreator<Todo>(args);
-    const options = {
-      ...paginationOptions,
-      where: { ...paginationOptions.where, user: user.id },
-    };
-    const data = await this.repo.findAndCount(options);
-    return paginateResponse(data, args.page, args.limit);
-  }
-
-  async getTodosByIds(ids: string[]) {
-    const options: any = { id: { $in: ids } };
-    return await this.repo.find(options);
-  }
-
-  async createTodo(body: CreateTodoArgs, user: User) {
-    const id = uuid();
-    const todo = await this.repo.create({
-      ...body,
-      user: user.id,
-      id,
+  async findAllTodos(args: ConnectionArgs): Promise<TodoConnection> {
+    const { limit, offset } = getPagingParameters(args);
+    const [results, count] = await this.repo.findAndCount({
+      take: limit,
+      skip: offset,
     });
-    this.userService.addTodo(user.id, id);
+
+    return connectionFromArraySlice(results, args, {
+      arrayLength: count,
+      sliceStart: offset || 0,
+    });
+  }
+
+  async findTodoById(id: string) {
+    console.log(id);
+
+    return await this.repo.findOneBy({ id });
+  }
+
+  async addTodo(args: TodoCreateArgs): Promise<Todo> {
+    const guid = uuid();
+    const id = toGlobalId('Todo', guid);
+    const todo = await this.repo.create({ ...args, id });
     return await this.repo.save(todo);
-  }
-
-  async updateTodo(args: UpdateTodoArgs) {
-    const { id, ...body } = args;
-    const updated_at = new Date();
-    Object.keys(body).forEach((key) => body[key] === null && delete body[key]);
-    const todo = await this.repo.update({ id }, { ...body, updated_at });
-    return todo?.raw?.acknowledged ?? false;
-  }
-
-  async deleteTodo(id: string) {
-    const result = await this.repo.delete({ id });
-    return result?.raw?.acknowledged ?? false;
   }
 }

@@ -7,7 +7,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { TodoService } from 'src/todo/todo.service';
+//import { TodoService } from 'src/todo/todo.service';
 import { CreateUserArgs, SigninUserArgs } from './args';
 import { UserService } from './user.service';
 import { UserGQL } from './graphql';
@@ -16,8 +16,8 @@ import { UserGQL } from './graphql';
 export class UserResolver {
   constructor(
     private service: UserService,
-    @Inject(forwardRef(() => TodoService)) private todoService: TodoService,
-  ) {}
+  ) // @Inject(forwardRef(() => TodoService)) private todoService: TodoService,
+  {}
 
   @Query((returns) => [UserGQL])
   users() {
@@ -39,8 +39,8 @@ export class UserResolver {
     return this.service.signin(body);
   }
 
-  @ResolveField()
-  todos(@Parent() user: UserGQL) {
-    return this.todoService.getTodosByIds(user.todos);
-  }
+  // @ResolveField()
+  // todos(@Parent() user: UserGQL) {
+  //   return this.todoService.getTodosByIds(user.todos);
+  // }
 }

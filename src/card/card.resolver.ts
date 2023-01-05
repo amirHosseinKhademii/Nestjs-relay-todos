@@ -2,17 +2,17 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ConnectionArgs } from 'src/relay/connection.args';
 import { CardService } from './card.service';
 import { CardCreateArgs } from './types/card.create.args';
-import { Card, CardResponse } from './types/card.types';
+import { Card, CardConnection } from './types/card.types';
 
 @Resolver(() => Card)
 export class CardResolver {
   constructor(private service: CardService) {}
 
-  @Query(() => CardResponse, { name: 'cards' })
+  @Query(() => CardConnection, { name: 'cards' })
   cards(
     @Args() args: ConnectionArgs,
     @Args('query', { nullable: true }) query?: string,
-  ): Promise<CardResponse> {
+  ): Promise<CardConnection> {
     return this.service.findAllCards(args);
   }
 

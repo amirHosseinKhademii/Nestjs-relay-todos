@@ -1,49 +1,23 @@
-import { UseGuards } from '@nestjs/common';
-import {
-  Args,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
-import { GetUser } from 'src/user/decorators';
-import { AuthGraphGuard } from 'src/user/guards';
-import { User } from 'src/user/typeorm';
-import { UserService } from 'src/user/user.service';
-import { CreateTodoArgs, GetTodosArgs } from './args';
-import { Todo } from './typeorm';
-import { TodoResponseGQL, TodoGQL } from './graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ConnectionArgs } from 'src/relay/connection.args';
 import { TodoService } from './todo.service';
-import { UpdateTodoArgs } from './args/update-todo.args';
+import { TodoCreateArgs } from './types/todo.create.args';
+import { Todo, TodoConnection } from './types/todo.types';
 
-@Resolver((of) => TodoGQL)
-@UseGuards(new AuthGraphGuard())
+@Resolver(() => Todo)
 export class TodoResolver {
-  constructor(private service: TodoService, private userService: UserService) {}
+  constructor(private service: TodoService) {}
 
-  @Query((returns) => TodoResponseGQL)
-  todos(@Args() args: GetTodosArgs, @GetUser() user: User) {
-    return this.service.getAllTodos(args, user);
+  @Query(() => TodoConnection, { name: 'todos' })
+  cards(
+    @Args() args: ConnectionArgs,
+    @Args('query', { nullable: true }) query?: string,
+  ): Promise<TodoConnection> {
+    return this.service.findAllTodos(args);
   }
 
-  @Mutation((returns) => TodoGQL)
-  addTodo(@Args() body: CreateTodoArgs, @GetUser() user: User) {
-    return this.service.createTodo(body, user);
-  }
-
-  @Mutation((returns) => Boolean)
-  updateTodo(@Args() args: UpdateTodoArgs) {
-    return this.service.updateTodo(args);
-  }
-
-  @Mutation(() => Boolean)
-  deleteTodo(@Args('id') id: string) {
-    return this.service.deleteTodo(id);
-  }
-
-  @ResolveField()
-  user(@Parent() todo: Todo) {
-    return this.userService.getUser(todo.user);
+  @Mutation(() => Todo)
+  addTodo(@Args() args: TodoCreateArgs) {
+    return this.service.addTodo(args);
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Card, CardResponse } from './types/card.types';
+import { Card, CardConnection } from './types/card.types';
 import { connectionFromArraySlice } from 'graphql-relay';
 import { ConnectionArgs, getPagingParameters } from 'src/relay/connection.args';
 import { CardCreateArgs } from './types/card.create.args';
@@ -12,7 +12,7 @@ import { toGlobalId } from 'graphql-relay';
 export class CardService {
   constructor(@InjectRepository(Card) private repo: Repository<Card>) {}
 
-  async findAllCards(args: ConnectionArgs): Promise<CardResponse> {
+  async findAllCards(args: ConnectionArgs): Promise<CardConnection> {
     const { limit, offset } = getPagingParameters(args);
     const [results, count] = await this.repo.findAndCount({
       take: limit,

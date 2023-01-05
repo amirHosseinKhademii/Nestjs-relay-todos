@@ -2,7 +2,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TodoModule } from 'src/todo/todo.module';
+//import { TodoModule } from 'src/todo/todo.module';
 import { User } from './typeorm';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
@@ -10,7 +10,7 @@ import { JwtStrategy } from './utils/jwt-strategy';
 
 @Module({
   imports: [
-    forwardRef(() => TodoModule),
+    //forwardRef(() => TodoModule),
     TypeOrmModule.forFeature([User]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({

@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { TodoGQL } from 'src/todo/graphql/todo.type';
+//import { TodoGQL } from 'src/todo/graphql/todo.type';
 
 @ObjectType('User')
 export class UserGQL {
@@ -15,6 +15,6 @@ export class UserGQL {
   @Field()
   password: string;
 
-  @Field((type) => [TodoGQL], { nullable: true })
-  todos: string[];
+  // @Field((type) => [TodoGQL], { nullable: true })
+  // todos: string[];
 }

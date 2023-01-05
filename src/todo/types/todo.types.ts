@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType, InterfaceType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 import { NodeInterface } from 'src/app/app.resolver';
 import { NodeType } from 'src/app/node-type.decorator';
@@ -10,9 +10,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@NodeType('Card')
+@NodeType('Todo')
 @Entity()
-export class Card implements NodeInterface {
+export class Todo implements NodeInterface {
   @ObjectIdColumn({ update: false })
   _id: string;
 
@@ -30,4 +30,4 @@ export class Card implements NodeInterface {
 }
 
 @ObjectType()
-export class CardConnection extends relayTypes<Card>(Card) {}
+export class TodoConnection extends relayTypes<Todo>(Todo) {}

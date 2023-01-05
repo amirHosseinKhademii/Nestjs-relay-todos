@@ -12,7 +12,7 @@ type Card implements Node {
   description: String
 }
 
-type CardResponse {
+type CardConnection {
   edges: [CardEdge!]
   pageInfo: CardPageInfo
 }
@@ -29,11 +29,36 @@ type CardPageInfo {
   hasNextPage: Boolean!
 }
 
+type Todo implements Node {
+  id: ID!
+  title: String!
+  description: String
+}
+
+type TodoConnection {
+  edges: [TodoEdge!]
+  pageInfo: TodoPageInfo
+}
+
+type TodoEdge {
+  cursor: String
+  node: Todo
+}
+
+type TodoPageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
 type Query {
   node(id: ID!): Node
-  cards(before: String, after: String, first: Float, last: Float, query: String): CardResponse!
+  todos(before: String, after: String, first: Float, last: Float, query: String): TodoConnection!
+  cards(before: String, after: String, first: Float, last: Float, query: String): CardConnection!
 }
 
 type Mutation {
+  addTodo(title: String!, description: String = ""): Todo!
   addCard(title: String!, description: String = ""): Card!
 }
