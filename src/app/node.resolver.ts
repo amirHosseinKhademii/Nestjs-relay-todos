@@ -17,8 +17,6 @@ export class NodeResolver extends NodeFieldResolver {
   }
   resolveNode(gid: string) {
     const { type } = fromGlobalId(gid);
-    console.log({ type });
-
     switch (type) {
       case 'Card':
         return this.cardService.findCardById(gid);

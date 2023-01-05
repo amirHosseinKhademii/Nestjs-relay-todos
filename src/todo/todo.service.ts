@@ -24,8 +24,6 @@ export class TodoService {
   }
 
   async findTodoById(id: string) {
-    console.log(id);
-
     return await this.repo.findOneBy({ id });
   }
 

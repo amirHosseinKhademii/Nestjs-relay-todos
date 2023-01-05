@@ -33,6 +33,7 @@ type Todo implements Node {
   id: ID!
   title: String!
   description: String
+  cards(before: String, after: String, first: Float, last: Float, query: String): CardConnection!
 }
 
 type TodoConnection {
