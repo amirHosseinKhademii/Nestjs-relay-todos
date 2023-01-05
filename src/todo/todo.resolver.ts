@@ -1,4 +1,11 @@
-import { Args, Mutation, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Mutation,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { CardService } from 'src/card/card.service';
 import { ConnectionArgs } from 'src/relay/connection.args';
 import { TodoService } from './todo.service';
@@ -15,6 +22,11 @@ export class TodoResolver {
     @Args('query', { nullable: true }) query?: string,
   ): Promise<TodoConnection> {
     return this.service.findAllTodos(args);
+  }
+
+  @Query(() => Todo, { name: 'todo' })
+  todo(@Args({ type: () => ID, name: 'id' }) id: string): Promise<Todo> {
+    return this.service.findTodoById(id);
   }
 
   @Mutation(() => Todo)

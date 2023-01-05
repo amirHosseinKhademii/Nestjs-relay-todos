@@ -56,6 +56,7 @@ type TodoPageInfo {
 type Query {
   node(id: ID!): Node
   todos(before: String, after: String, first: Float, last: Float, query: String): TodoConnection!
+  todo(id: ID!): Todo!
   cards(before: String, after: String, first: Float, last: Float, query: String): CardConnection!
 }
 
