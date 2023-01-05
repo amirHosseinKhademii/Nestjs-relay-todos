@@ -1,8 +1,8 @@
-import { ArgsType, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
-@ArgsType()
-export class CardCreateArgs {
+@InputType()
+export class CreateCardInput {
   @IsString()
   @IsNotEmpty()
   @MinLength(2)

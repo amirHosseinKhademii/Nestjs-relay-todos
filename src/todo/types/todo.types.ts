@@ -1,8 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-
-import { NodeInterface } from 'src/app/app.resolver';
-import { NodeType } from 'src/app/node-type.decorator';
-import { Card, CardConnection } from 'src/card/types/card.types';
+import { NodeInterface } from 'src/relay/app.resolver';
+import { CardConnection } from 'src/card/types/card.types';
 import { relayTypes } from 'src/relay/relay.types';
 import {
   Column,
@@ -10,6 +8,7 @@ import {
   ObjectIdColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { NodeType } from 'src/relay/node-type.decorator';
 
 @NodeType('Todo')
 @Entity()

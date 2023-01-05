@@ -1,7 +1,9 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ConnectionArgs } from 'src/relay/connection.args';
+import { InputArg } from 'src/relay/input-arg.decorator';
+import { RelayMutation } from 'src/relay/reply-mutation.decorator';
 import { CardService } from './card.service';
-import { CardCreateArgs } from './types/card.create.args';
+import { CreateCardInput } from './types/card-create.input';
 import { Card, CardConnection } from './types/card.types';
 
 @Resolver(() => Card)
@@ -16,9 +18,9 @@ export class CardResolver {
     return this.service.findAllCards(args);
   }
 
-  @Mutation(() => Card)
-  addCard(@Args() args: CardCreateArgs) {
-    return this.service.addCard(args);
+  @RelayMutation(() => Card)
+  addCard(@InputArg(() => CreateCardInput) input: CreateCardInput) {
+    return this.service.addCard(input);
   }
 
   // @Query(() => Card)

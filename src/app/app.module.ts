@@ -5,9 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { CardModule } from 'src/card/card.module';
 import { Card } from 'src/card/types/card.types';
-import { NodeResolver } from './node.resolver';
 import { TodoModule } from 'src/todo/todo.module';
 import { Todo } from 'src/todo/types/todo.types';
+import { NodeResolver } from 'src/relay/node.resolver';
 
 @Module({
   imports: [

@@ -29,6 +29,13 @@ type CardPageInfo {
   hasNextPage: Boolean!
 }
 
+type AddCardPayload implements Node {
+  id: ID!
+  title: String!
+  description: String
+  clientMutationId: String
+}
+
 type Todo implements Node {
   id: ID!
   title: String!
@@ -62,5 +69,11 @@ type Query {
 
 type Mutation {
   addTodo(title: String!, description: String = ""): Todo!
-  addCard(title: String!, description: String = ""): Card!
+  addCard(input: AddCardInput!): AddCardPayload
+}
+
+input AddCardInput {
+  title: String!
+  description: String = ""
+  clientMutationId: String
 }

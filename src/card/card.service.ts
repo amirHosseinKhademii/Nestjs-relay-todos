@@ -4,9 +4,9 @@ import { Repository } from 'typeorm';
 import { Card, CardConnection } from './types/card.types';
 import { connectionFromArraySlice } from 'graphql-relay';
 import { ConnectionArgs, getPagingParameters } from 'src/relay/connection.args';
-import { CardCreateArgs } from './types/card.create.args';
 import { v4 as uuid } from 'uuid';
 import { toGlobalId } from 'graphql-relay';
+import { CreateCardInput } from './types/card-create.input';
 
 @Injectable()
 export class CardService {
@@ -29,7 +29,7 @@ export class CardService {
     return await this.repo.findOneBy({ id });
   }
 
-  async addCard(args: CardCreateArgs): Promise<Card> {
+  async addCard(args: CreateCardInput): Promise<Card> {
     const guid = uuid();
     const id = toGlobalId('Card', guid);
     const card = await this.repo.create({ ...args, id });

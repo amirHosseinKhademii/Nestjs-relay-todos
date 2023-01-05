@@ -1,7 +1,6 @@
-import { Field, ID, ObjectType, InterfaceType } from '@nestjs/graphql';
-
-import { NodeInterface } from 'src/app/app.resolver';
-import { NodeType } from 'src/app/node-type.decorator';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { NodeInterface } from 'src/relay/app.resolver';
+import { NodeType } from 'src/relay/node-type.decorator';
 import { relayTypes } from 'src/relay/relay.types';
 import {
   Column,
