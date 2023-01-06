@@ -122,7 +122,7 @@ input AddTodoInput {
 }
 
 input UpdateTodoInput {
-  id: String!
+  id: ID!
   title: String
   description: String
   isCompleted: Boolean

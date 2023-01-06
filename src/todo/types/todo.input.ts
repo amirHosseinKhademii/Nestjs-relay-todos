@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, ID, InputType } from '@nestjs/graphql';
 import {
   IsBoolean,
   IsNotEmpty,
@@ -24,7 +24,7 @@ export class CreateTodoInput {
 export class UpdateTodoInput {
   @IsNotEmpty()
   @IsString()
-  @Field()
+  @Field(() => ID)
   id: string;
 
   @IsString()
