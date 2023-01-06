@@ -1,8 +1,7 @@
 import { ObjectTypeOptions, ObjectType } from '@nestjs/graphql';
-import { NodeInterface } from './app.resolver';
+import { NodeInterface } from '../relay.types';
 
 export function NodeType(name?: string): ClassDecorator {
-  // eslint-disable-next-line @typescript-eslint/ban-types
   return (target: Function) => {
     const interfaces = [];
 

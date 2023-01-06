@@ -1,50 +1,100 @@
 import { Type } from '@nestjs/common';
-import { ObjectType, Field } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  InterfaceType,
+  ID,
+  ArgsOptions,
+  ReturnTypeFunc,
+  MutationOptions,
+} from '@nestjs/graphql';
 import * as Relay from 'graphql-relay';
+import { InputMixin, PayloadMixin } from './input-arg-factory';
 
 const typeMap = {};
 
-export function relayTypes<T>(type: Type<T>): any {
-  const { name } = type;
-  if (typeMap[`${name}`]) return typeMap[`${name}`];
-
-  @ObjectType(`${name}Edge`, { isAbstract: true })
-  class Edge implements Relay.Edge<T> {
-    public name = `${name}Edge`;
-
-    @Field({ nullable: true })
-    public cursor!: Relay.ConnectionCursor;
-
-    @Field(() => type, { nullable: true })
-    public node!: T;
-  }
-
-  @ObjectType(`${name}PageInfo`, { isAbstract: true })
-  class PageInfo implements Relay.PageInfo {
-    @Field({ nullable: true })
-    public startCursor!: Relay.ConnectionCursor;
-
-    @Field({ nullable: true })
-    public endCursor!: Relay.ConnectionCursor;
-
-    @Field(() => Boolean)
-    public hasPreviousPage!: boolean;
-
-    @Field(() => Boolean)
-    public hasNextPage!: boolean;
-  }
-
-  @ObjectType(`${name}Connection`, { isAbstract: true })
-  class Connection implements Relay.Connection<T> {
-    public name = `${name}Connection`;
-
-    @Field(() => [Edge], { nullable: true })
-    public edges!: Relay.Edge<T>[];
-
-    @Field(() => PageInfo, { nullable: true })
-    public pageInfo!: Relay.PageInfo;
-  }
-
-  typeMap[`${name}`] = Connection;
-  return typeMap[`${name}`];
+@InterfaceType('Node')
+export class NodeInterface {
+  @Field(() => ID, {
+    nullable: false,
+  })
+  id!: string;
 }
+
+export const typeNodeInterface = () => NodeInterface;
+
+export const typeNodeInterfaces = () => [NodeInterface];
+
+export const returnsNodeInterface = () => NodeInterface;
+
+export const returnsNodeInterfaces = () => [NodeInterface];
+
+export type ResolvedNode =
+  | Promise<NodeInterface>
+  | NodeInterface
+  | Promise<null>
+  | null
+  | Promise<undefined>
+  | undefined;
+
+export type InputArgOptions = Omit<
+  ArgsOptions,
+  'name' | 'nullable' | 'type' | 'defaultValue'
+>;
+
+export const BASE_KEY = 'nestjs-relay';
+export const METHOD_KEY = 'method';
+export const METHOD_METADATA_KEY = `${BASE_KEY}:${METHOD_KEY}`;
+export const CLASS_KEY = 'class';
+export const CLASS_METADATA_KEY = `${BASE_KEY}:${CLASS_KEY}`;
+
+export interface MethodIdentifier {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  target: Object;
+  key: string | symbol;
+}
+
+export interface ClassIdentifier {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  target: Function;
+}
+
+export type ClassMetadata = {
+  name: string;
+};
+
+export type ParameterMetadata = Omit<ArgsOptions, 'type'> & {
+  typeFunc: ReturnTypeFunc;
+  paramIndex: number;
+};
+
+export type AnyConstructor<T = Record<string, unknown>> = new (
+  ...args: any[]
+) => T;
+
+export type AnyFunction<A = any> = (...input: any[]) => A;
+
+export type Mixin<T extends AnyFunction> = InstanceType<ReturnType<T>>;
+
+export interface CreateInputTypeArgs {
+  params: ParameterMetadata[];
+  mutationName: string;
+}
+
+export type InputArgOptionsAsynConstructor = Pick<
+  ArgsOptions,
+  'type' | 'description'
+> & {
+  paramIndex: number;
+};
+
+export type InputMixin = Mixin<typeof InputMixin>;
+
+export type PayloadMixin = Mixin<typeof PayloadMixin>;
+
+export interface CreatePayloadTypeArgs {
+  typeFunc: ReturnTypeFunc;
+  mutationName: string;
+}
+
+export type RelayMutationOptions = Omit<MutationOptions, 'nullable'>;

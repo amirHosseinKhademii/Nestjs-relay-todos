@@ -1,30 +1,11 @@
-import { ArgsOptions, ReturnTypeFunc } from '@nestjs/graphql';
-
-const BASE_KEY = 'nestjs-relay';
-const METHOD_KEY = 'method';
-const METHOD_METADATA_KEY = `${BASE_KEY}:${METHOD_KEY}`;
-const CLASS_KEY = 'class';
-const CLASS_METADATA_KEY = `${BASE_KEY}:${CLASS_KEY}`;
-
-export interface MethodIdentifier {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  target: Object;
-  key: string | symbol;
-}
-
-export type ParameterMetadata = Omit<ArgsOptions, 'type'> & {
-  typeFunc: ReturnTypeFunc;
-  paramIndex: number;
-};
-
-export interface ClassIdentifier {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  target: Function;
-}
-
-export type ClassMetadata = {
-  name: string;
-};
+import {
+  ClassIdentifier,
+  ClassMetadata,
+  CLASS_METADATA_KEY,
+  MethodIdentifier,
+  METHOD_METADATA_KEY,
+  ParameterMetadata,
+} from './relay.types';
 
 export class MetadataStorage {
   static addMethodMetadata(args: MethodIdentifier & ParameterMetadata): void {

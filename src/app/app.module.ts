@@ -7,9 +7,9 @@ import { CardModule } from 'src/card/card.module';
 import { Card } from 'src/card/types/card.types';
 import { TodoModule } from 'src/todo/todo.module';
 import { Todo } from 'src/todo/types/todo.types';
-import { NodeResolver } from 'src/relay/node.resolver';
 import { UserModule } from 'src/user/user.module';
 import { User } from 'src/user/types';
+import { NodeResolver } from './node.resolver';
 
 @Module({
   imports: [

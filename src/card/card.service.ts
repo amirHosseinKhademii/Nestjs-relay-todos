@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Card, CardConnection } from './types/card.types';
 import { connectionFromArraySlice } from 'graphql-relay';
-import { ConnectionArgs, getPagingParameters } from 'src/relay/connection.args';
+import { ConnectionArgs, getPagingParameters } from 'src/relay';
 import { v4 as uuid } from 'uuid';
 import { toGlobalId } from 'graphql-relay';
 import { CreateCardInput } from './types/card.input';

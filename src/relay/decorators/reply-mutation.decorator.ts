@@ -3,15 +3,15 @@ import {
   MutationOptions,
   Mutation,
   Args,
-  ArgsOptions,
 } from '@nestjs/graphql';
+import { InputArgFactory, PayloadMixin } from '../input-arg-factory';
+
+import { MetadataStorage } from '../metadata-storage';
 import {
   AnyConstructor,
-  InputArgFactory,
-  PayloadMixin,
-} from './input-arg-factory';
-
-import { MetadataStorage } from './metadata-storage';
+  CreatePayloadTypeArgs,
+  RelayMutationOptions,
+} from '../relay.types';
 
 export const isPromise = <T>(
   maybePromise: T | Promise<T>,
@@ -26,11 +26,6 @@ export const getClientMutationId = (args: any[]): string => {
   return args[relayArgIndex]?.clientMutationId || null;
 };
 
-export interface CreatePayloadTypeArgs {
-  typeFunc: ReturnTypeFunc;
-  mutationName: string;
-}
-
 export class PayloadTypeFactory {
   static create(args: CreatePayloadTypeArgs): AnyConstructor {
     const type = args.typeFunc() as AnyConstructor;
@@ -38,8 +33,6 @@ export class PayloadTypeFactory {
     return payloadType;
   }
 }
-
-export type RelayMutationOptions = Omit<MutationOptions, 'nullable'>;
 
 export function RelayMutation<T>(
   typeFunc: ReturnTypeFunc,

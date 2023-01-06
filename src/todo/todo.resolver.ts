@@ -8,9 +8,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { CardService } from 'src/card/card.service';
-import { ConnectionArgs } from 'src/relay/connection.args';
-import { InputArg } from 'src/relay/input-arg.decorator';
-import { RelayMutation } from 'src/relay/reply-mutation.decorator';
+import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
 import { AuthGraphGuard } from 'src/user/guards';
 import { TodoService } from './todo.service';
 import { CreateTodoInput, UpdateTodoInput } from './types/todo.input';

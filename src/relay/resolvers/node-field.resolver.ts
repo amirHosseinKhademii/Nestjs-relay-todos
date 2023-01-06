@@ -1,14 +1,5 @@
 import { Query, Args, Resolver, ID } from '@nestjs/graphql';
-
-import { NodeInterface } from './app.resolver';
-
-export type ResolvedNode =
-  | Promise<NodeInterface>
-  | NodeInterface
-  | Promise<null>
-  | null
-  | Promise<undefined>
-  | undefined;
+import { NodeInterface } from '../relay.types';
 
 @Resolver(() => NodeInterface)
 export class NodeFieldResolver {

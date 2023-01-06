@@ -1,5 +1,5 @@
 import { Field, ID } from '@nestjs/graphql';
-import { NodeInterface } from 'src/relay/app.resolver';
+import { NodeInterface, NodeType } from 'src/relay';
 import {
   Column,
   CreateDateColumn,
@@ -8,7 +8,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { NodeType } from 'src/relay/node-type.decorator';
 
 @NodeType('User')
 @Entity()

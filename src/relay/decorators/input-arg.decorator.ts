@@ -1,10 +1,6 @@
-import { ArgsOptions, ReturnTypeFunc } from '@nestjs/graphql';
-import { MetadataStorage } from './metadata-storage';
-
-export type InputArgOptions = Omit<
-  ArgsOptions,
-  'name' | 'nullable' | 'type' | 'defaultValue'
->;
+import { ReturnTypeFunc } from '@nestjs/graphql';
+import { MetadataStorage } from '../metadata-storage';
+import { InputArgOptions } from '../relay.types';
 
 export function InputArg<T>(
   typeFunc: ReturnTypeFunc,

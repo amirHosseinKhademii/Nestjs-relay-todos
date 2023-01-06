@@ -1,7 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { NodeInterface } from 'src/relay/app.resolver';
+import { NodeInterface, NodeType, CreateConnectionType } from 'src/relay';
 import { CardConnection } from 'src/card/types/card.types';
-import { relayTypes } from 'src/relay/relay.types';
 import {
   Column,
   CreateDateColumn,
@@ -10,7 +9,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { NodeType } from 'src/relay/node-type.decorator';
 
 @NodeType('Todo')
 @Entity()
@@ -48,4 +46,4 @@ export class Todo implements NodeInterface {
 }
 
 @ObjectType()
-export class TodoConnection extends relayTypes<Todo>(Todo) {}
+export class TodoConnection extends CreateConnectionType<Todo>(Todo) {}

@@ -1,14 +1,15 @@
-import { ArgsOptions, Field, InputType, ObjectType } from '@nestjs/graphql';
-
-import { ParameterMetadata } from './metadata-storage';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import {
+  AnyConstructor,
+  CreateInputTypeArgs,
+  InputArgOptionsAsynConstructor,
+} from './relay.types';
 
 export const capitalise = (text: string): string =>
   text.charAt(0).toUpperCase() + text.slice(1);
 
 export const getInputName = (mutationName: string): string =>
   capitalise(mutationName) + 'Input';
-
-export type InputMixin = Mixin<typeof InputMixin>;
 
 export function InputMixin<TBase extends AnyConstructor>(
   base: TBase,
@@ -28,25 +29,8 @@ export function InputMixin<TBase extends AnyConstructor>(
   return Input;
 }
 
-export type AnyConstructor<T = Record<string, unknown>> = new (
-  ...args: any[]
-) => T;
-
-export type AnyFunction<A = any> = (...input: any[]) => A;
-
-export type Mixin<T extends AnyFunction> = InstanceType<ReturnType<T>>;
-
-export interface CreateInputTypeArgs {
-  params: ParameterMetadata[];
-  mutationName: string;
-}
-
-export type InputArgOptions = Pick<ArgsOptions, 'type' | 'description'> & {
-  paramIndex: number;
-};
-
 export class InputArgFactory {
-  static create(args: CreateInputTypeArgs): InputArgOptions {
+  static create(args: CreateInputTypeArgs): InputArgOptionsAsynConstructor {
     if (args.params.length === 0) {
       /**
        * No parameters registered
@@ -86,8 +70,6 @@ export class InputArgFactory {
 
 export const getPayloadName = (mutationName: string): string =>
   capitalise(mutationName) + 'Payload';
-
-export type PayloadMixin = Mixin<typeof PayloadMixin>;
 
 export function PayloadMixin<TBase extends AnyConstructor>(
   base: TBase,

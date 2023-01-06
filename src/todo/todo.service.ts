@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { connectionFromArraySlice, toGlobalId } from 'graphql-relay';
-import { ConnectionArgs, getPagingParameters } from 'src/relay/connection.args';
+import { ConnectionArgs, getPagingParameters } from 'src/relay';
 import { Repository } from 'typeorm';
 import { CreateTodoInput, UpdateTodoInput } from './types/todo.input';
 import { Todo, TodoConnection } from './types/todo.types';
