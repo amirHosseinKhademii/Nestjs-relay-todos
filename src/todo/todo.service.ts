@@ -42,4 +42,18 @@ export class TodoService {
     const updatedTodo: Todo = { ...todo, ...body, updated_at };
     return await this.repo.save(updatedTodo);
   }
+
+  async updateCardsInTodoById({
+    todoId,
+    cardId,
+  }: {
+    todoId: string;
+    cardId: string;
+  }) {
+    const updated_at = new Date();
+    const todo = await this.repo.findOneByOrFail({ id: todoId });
+    const cards = todo.cards ? [...todo.cards, cardId] : [cardId];
+    const updatedTodo: Todo = { ...todo, cards, updated_at };
+    return await this.repo.save(updatedTodo);
+  }
 }

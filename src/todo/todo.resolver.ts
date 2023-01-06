@@ -1,4 +1,11 @@
-import { Args, ID, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { CardService } from 'src/card/card.service';
 import { ConnectionArgs } from 'src/relay/connection.args';
 import { InputArg } from 'src/relay/input-arg.decorator';
@@ -36,9 +43,10 @@ export class TodoResolver {
 
   @ResolveField()
   cards(
+    @Parent() todo: Todo,
     @Args() args: ConnectionArgs,
     @Args('query', { nullable: true }) query?: string,
   ): Promise<TodoConnection> {
-    return this.cardService.findAllCards(args);
+    return this.cardService.findCardsByIds(args, todo.cards);
   }
 }

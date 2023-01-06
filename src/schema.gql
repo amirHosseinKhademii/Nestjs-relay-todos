@@ -29,13 +29,6 @@ type CardPageInfo {
   hasNextPage: Boolean!
 }
 
-type AddCardPayload implements Node {
-  id: ID!
-  title: String!
-  description: String
-  clientMutationId: String
-}
-
 type Todo implements Node {
   id: ID!
   title: String!
@@ -66,6 +59,13 @@ type TodoPageInfo {
   endCursor: String
   hasPreviousPage: Boolean!
   hasNextPage: Boolean!
+}
+
+type AddCardPayload implements Node {
+  id: ID!
+  title: String!
+  description: String
+  clientMutationId: String
 }
 
 type AddTodoPayload implements Node {
@@ -118,6 +118,7 @@ input UpdateTodoInput {
 }
 
 input AddCardInput {
+  todoId: ID!
   title: String!
   description: String = ""
   clientMutationId: String

@@ -42,8 +42,9 @@ export class Todo implements NodeInterface {
   @UpdateDateColumn()
   updated_at: Date;
 
+  @Column({ default: [] })
   @Field(() => CardConnection)
-  cards: CardConnection;
+  cards: string[];
 }
 
 @ObjectType()
