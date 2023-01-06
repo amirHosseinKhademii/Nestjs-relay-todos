@@ -3,17 +3,16 @@ import {
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
-  UseGuards,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserArgs, SigninUserArgs } from './args';
-import { User } from './typeorm';
+import { User } from './types';
 import { v4 as uuid } from 'uuid';
 import { hasher } from './utils';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { AuthGuard } from '@nestjs/passport';
+import { CreateUserInput, SigninUserInput } from './types/user.input';
+import { toGlobalId } from 'graphql-relay';
 
 @Injectable()
 export class UserService {
@@ -30,13 +29,12 @@ export class UserService {
     return await this.repo.findOneBy({ id });
   }
 
-  async createUser(body: CreateUserArgs) {
+  async createUser(body: CreateUserInput) {
     const hashed = await hasher(body.password);
     const user = await this.repo.create({
       ...body,
       password: hashed,
-      id: uuid(),
-      todos: [],
+      id: toGlobalId('User', uuid()),
     });
     try {
       await this.repo.save(user);
@@ -48,17 +46,10 @@ export class UserService {
     }
   }
 
-  async signin({ userName, password }: SigninUserArgs): Promise<string> {
+  async signin({ userName, password }: SigninUserInput): Promise<string> {
     const user = await this.repo.findOneBy({ userName });
     if (user && (await bcrypt.compare(password, user.password)))
       return await this.jwt.sign({ userName });
     else throw new UnauthorizedException('Check your credentials.');
-  }
-
-  @UseGuards(AuthGuard())
-  async addTodo(userId: string, todoId: string) {
-    const user = await this.repo.findOneBy({ id: userId });
-    user.todos = [...user.todos, todoId];
-    return await this.repo.save(user);
   }
 }

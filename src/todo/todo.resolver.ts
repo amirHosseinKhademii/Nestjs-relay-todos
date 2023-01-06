@@ -1,3 +1,4 @@
+import { UseGuards } from '@nestjs/common';
 import {
   Args,
   ID,
@@ -10,11 +11,13 @@ import { CardService } from 'src/card/card.service';
 import { ConnectionArgs } from 'src/relay/connection.args';
 import { InputArg } from 'src/relay/input-arg.decorator';
 import { RelayMutation } from 'src/relay/reply-mutation.decorator';
+import { AuthGraphGuard } from 'src/user/guards';
 import { TodoService } from './todo.service';
 import { CreateTodoInput, UpdateTodoInput } from './types/todo.input';
 import { Todo, TodoConnection } from './types/todo.types';
 
 @Resolver(() => Todo)
+@UseGuards(new AuthGraphGuard())
 export class TodoResolver {
   constructor(private service: TodoService, private cardService: CardService) {}
 

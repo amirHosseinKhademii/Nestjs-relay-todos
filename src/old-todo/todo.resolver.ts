@@ -9,7 +9,7 @@ import {
 } from '@nestjs/graphql';
 import { GetUser } from 'src/user/decorators';
 import { AuthGraphGuard } from 'src/user/guards';
-import { User } from 'src/user/typeorm';
+import { User } from 'src/user/types';
 import { UserService } from 'src/user/user.service';
 import { CreateTodoArgs, GetTodosArgs } from './args';
 import { Todo } from './typeorm';
@@ -27,10 +27,10 @@ export class TodoResolver {
     return this.service.getAllTodos(args, user);
   }
 
-  @Mutation((returns) => TodoGQL)
-  addTodo(@Args() body: CreateTodoArgs, @GetUser() user: User) {
-    return this.service.createTodo(body, user);
-  }
+  // @Mutation((returns) => TodoGQL)
+  // addTodo(@Args() body: CreateTodoArgs, @GetUser() user: User) {
+  //   return this.service.createTodo(body, user);
+  // }
 
   @Mutation((returns) => Boolean)
   updateTodo(@Args() args: UpdateTodoArgs) {

@@ -90,14 +90,26 @@ type UpdateTodoPayload implements Node {
   clientMutationId: String
 }
 
+type User implements Node {
+  id: ID!
+  userName: String!
+  fullName: String!
+  created_at: DateTime
+  updated_at: DateTime
+}
+
 type Query {
   node(id: ID!): Node
+  users: [User!]!
+  user(userId: String!): User!
   todos(before: String, after: String, first: Float, last: Float, query: String): TodoConnection!
   todo(id: ID!): Todo!
   cards(before: String, after: String, first: Float, last: Float, query: String): CardConnection!
 }
 
 type Mutation {
+  signUp(userName: String!, fullName: String!, password: String!): String!
+  signIn(userName: String!, password: String!): String!
   addTodo(input: AddTodoInput!): AddTodoPayload
   updateTodo(input: UpdateTodoInput!): UpdateTodoPayload
   addCard(input: AddCardInput!): AddCardPayload
