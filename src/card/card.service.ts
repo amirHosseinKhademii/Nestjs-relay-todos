@@ -33,7 +33,7 @@ export class CardService {
     return await this.repo.findOneBy({ id });
   }
 
-  async addCard(input: CreateCardInput): Promise<Card> {
+  async addCard(input: CreateCardInput) {
     const guid = uuid();
     const id = toGlobalId('Card', guid);
     const card = await this.repo.create({ ...input, id });
@@ -41,7 +41,8 @@ export class CardService {
       todoId: input.todoId,
       cardId: id,
     });
-    return await this.repo.save(card);
+    const reslut = await this.repo.save(card);
+    return { card: reslut };
   }
 
   async findCardsByIds(

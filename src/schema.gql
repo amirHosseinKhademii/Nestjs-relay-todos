@@ -42,10 +42,8 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type AddCardPayload implements Node {
-  id: ID!
-  title: String!
-  description: String
+type AddCardPayload {
+  card: Card!
   clientMutationId: String
 }
 
@@ -77,27 +75,13 @@ type TodoPageInfo {
   hasNextPage: Boolean!
 }
 
-type AddTodoPayload implements Node {
-  id: ID!
-  title: String!
-  description: String
-  isCompleted: Boolean
-  created_at: DateTime
-  updated_at: DateTime
-  cards(before: String, after: String, first: Float, last: Float, query: String): CardConnection!
-  user: User!
+type AddTodoPayload {
+  todo: Todo!
   clientMutationId: String
 }
 
-type UpdateTodoPayload implements Node {
-  id: ID!
-  title: String!
-  description: String
-  isCompleted: Boolean
-  created_at: DateTime
-  updated_at: DateTime
-  cards(before: String, after: String, first: Float, last: Float, query: String): CardConnection!
-  user: User!
+type UpdateTodoPayload {
+  todo: Todo!
   clientMutationId: String
 }
 

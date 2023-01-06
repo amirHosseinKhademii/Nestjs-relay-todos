@@ -5,6 +5,7 @@ import { AuthGraphGuard } from 'src/user';
 
 import { CardService } from './card.service';
 import { CreateCardInput } from './types/card.input';
+import { AddCardPayload } from './types/card.response';
 import { Card, CardConnection } from './types/card.types';
 
 @Resolver(() => Card)
@@ -20,7 +21,7 @@ export class CardResolver {
     return this.service.findAllCards(args);
   }
 
-  @RelayMutation(() => Card)
+  @RelayMutation(() => AddCardPayload)
   addCard(@InputArg(() => CreateCardInput) input: CreateCardInput) {
     return this.service.addCard(input);
   }

@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { CreateTodoInput, UpdateTodoInput } from './types/todo.input';
 import { Todo, TodoConnection } from './types/todo.types';
 import { v4 as uuid } from 'uuid';
+
 @Injectable()
 export class TodoService {
   constructor(@InjectRepository(Todo) private repo: Repository<Todo>) {}
@@ -31,11 +32,12 @@ export class TodoService {
     return await this.repo.findOneBy({ id });
   }
 
-  async addTodo(args: CreateTodoInput, user: string): Promise<Todo> {
+  async addTodo(args: CreateTodoInput, user: string) {
     const guid = uuid();
     const id = toGlobalId('Todo', guid);
     const todo = await this.repo.create({ ...args, id, user });
-    return await this.repo.save(todo);
+    const result = await this.repo.save(todo);
+    return { todo: result };
   }
 
   async updateTodo(args: UpdateTodoInput) {
@@ -44,7 +46,8 @@ export class TodoService {
     Object.keys(body).forEach((key) => body[key] === null && delete body[key]);
     const todo = await this.repo.findOneByOrFail({ id });
     const updatedTodo: Todo = { ...todo, ...body, updated_at };
-    return await this.repo.save(updatedTodo);
+    const result = await this.repo.save(updatedTodo);
+    return { todo: result };
   }
 
   async updateCardsInTodoById({

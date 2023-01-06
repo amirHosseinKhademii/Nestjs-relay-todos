@@ -14,6 +14,7 @@ import { UserService } from 'src/user/user.service';
 import { TodoService } from './todo.service';
 import { CreateTodoInput, UpdateTodoInput } from './types/todo.input';
 import { Todo, TodoConnection } from './types/todo.types';
+import { AddTodoPayload, UpdateTodoPayload } from './types/tood.response';
 
 @Resolver(() => Todo)
 @UseGuards(new AuthGraphGuard())
@@ -38,7 +39,7 @@ export class TodoResolver {
     return this.service.findTodoById(id);
   }
 
-  @RelayMutation(() => Todo)
+  @RelayMutation(() => AddTodoPayload)
   addTodo(
     @GetUser() user: User,
     @InputArg(() => CreateTodoInput) input: CreateTodoInput,
@@ -46,7 +47,7 @@ export class TodoResolver {
     return this.service.addTodo(input, user.id);
   }
 
-  @RelayMutation(() => Todo)
+  @RelayMutation(() => UpdateTodoPayload)
   updateTodo(@InputArg(() => UpdateTodoInput) input: UpdateTodoInput) {
     return this.service.updateTodo(input);
   }
