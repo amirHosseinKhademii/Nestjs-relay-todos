@@ -1,7 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
-import { AuthGraphGuard } from 'src/user/guards';
+import { AuthGraphGuard } from 'src/user';
+
 import { CardService } from './card.service';
 import { CreateCardInput } from './types/card.input';
 import { Card, CardConnection } from './types/card.types';

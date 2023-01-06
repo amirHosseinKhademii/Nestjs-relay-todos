@@ -3,13 +3,10 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { CardModule } from 'src/card/card.module';
-import { Card } from 'src/card/types/card.types';
-import { TodoModule } from 'src/todo/todo.module';
-import { Todo } from 'src/todo/types/todo.types';
-import { UserModule } from 'src/user/user.module';
-import { User } from 'src/user/types';
 import { NodeResolver } from './node.resolver';
+import { User, UserModule } from 'src/user';
+import { Card, CardModule } from 'src/card';
+import { Todo, TodoModule } from 'src/todo';
 
 @Module({
   imports: [

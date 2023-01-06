@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { CardConnection } from 'src/card';
 import { NodeInterface, NodeType, CreateConnectionType } from 'src/relay';
-import { CardConnection } from 'src/card/types/card.types';
 import {
   Column,
   CreateDateColumn,

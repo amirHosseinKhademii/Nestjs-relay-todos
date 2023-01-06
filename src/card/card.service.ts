@@ -7,7 +7,7 @@ import { ConnectionArgs, getPagingParameters } from 'src/relay';
 import { v4 as uuid } from 'uuid';
 import { toGlobalId } from 'graphql-relay';
 import { CreateCardInput } from './types/card.input';
-import { TodoService } from 'src/todo/todo.service';
+import { TodoService } from 'src/todo';
 
 @Injectable()
 export class CardService {

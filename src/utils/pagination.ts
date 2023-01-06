@@ -1,5 +1,5 @@
-import { PaginationArgs } from 'src/args/paginattion.args';
 import { FindManyOptionsCustom } from './pagination.types';
+import { PaginationArgs } from './paginattion.args';
 
 export function paginateResponse(data, page, limit) {
   const [result, total] = data;

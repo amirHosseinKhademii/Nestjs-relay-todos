@@ -7,9 +7,9 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { CardService } from 'src/card/card.service';
+import { CardService } from 'src/card';
 import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
-import { AuthGraphGuard } from 'src/user/guards';
+import { AuthGraphGuard } from 'src/user';
 import { TodoService } from './todo.service';
 import { CreateTodoInput, UpdateTodoInput } from './types/todo.input';
 import { Todo, TodoConnection } from './types/todo.types';
