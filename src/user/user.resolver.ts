@@ -1,42 +1,29 @@
-import { forwardRef, Inject } from '@nestjs/common';
-import {
-  Args,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
-//import { TodoService } from 'src/todo/todo.service';
-
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
-
 import { CreateUserInput, SigninUserInput } from './types/user.input';
 import { User } from './types';
 
-@Resolver((of) => User)
+@Resolver(() => User)
 export class UserResolver {
-  constructor(
-    private service: UserService, // @Inject(forwardRef(() => TodoService)) private todoService: TodoService,
-  ) {}
+  constructor(private service: UserService) {}
 
-  @Query((returns) => [User])
+  @Query(() => [User])
   users() {
-    return this.service.getUsers();
+    return this.service.findAllUsers();
   }
 
-  @Query((returns) => User)
+  @Query(() => User)
   user(@Args('userId') id: string) {
-    return this.service.getUser(id);
+    return this.service.finduserById(id);
   }
 
-  @Mutation((returns) => String)
+  @Mutation(() => String)
   signUp(@Args() body: CreateUserInput) {
-    return this.service.createUser(body);
+    return this.service.signupUser(body);
   }
 
-  @Mutation((returns) => String)
+  @Mutation(() => String)
   signIn(@Args() body: SigninUserInput) {
-    return this.service.signin(body);
+    return this.service.signinUser(body);
   }
 }

@@ -9,7 +9,8 @@ import {
 } from '@nestjs/graphql';
 import { CardService } from 'src/card';
 import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
-import { AuthGraphGuard } from 'src/user';
+import { AuthGraphGuard, GetUser, User } from 'src/user';
+import { UserService } from 'src/user/user.service';
 import { TodoService } from './todo.service';
 import { CreateTodoInput, UpdateTodoInput } from './types/todo.input';
 import { Todo, TodoConnection } from './types/todo.types';
@@ -17,14 +18,19 @@ import { Todo, TodoConnection } from './types/todo.types';
 @Resolver(() => Todo)
 @UseGuards(new AuthGraphGuard())
 export class TodoResolver {
-  constructor(private service: TodoService, private cardService: CardService) {}
+  constructor(
+    private service: TodoService,
+    private cardService: CardService,
+    private userService: UserService,
+  ) {}
 
   @Query(() => TodoConnection, { name: 'todos' })
   todos(
+    @GetUser() user: User,
     @Args() args: ConnectionArgs,
     @Args('query', { nullable: true }) query?: string,
   ): Promise<TodoConnection> {
-    return this.service.findAllTodos(args);
+    return this.service.findAllTodos(args, user.id);
   }
 
   @Query(() => Todo, { name: 'todo' })
@@ -33,8 +39,11 @@ export class TodoResolver {
   }
 
   @RelayMutation(() => Todo)
-  addTodo(@InputArg(() => CreateTodoInput) input: CreateTodoInput) {
-    return this.service.addTodo(input);
+  addTodo(
+    @GetUser() user: User,
+    @InputArg(() => CreateTodoInput) input: CreateTodoInput,
+  ) {
+    return this.service.addTodo(input, user.id);
   }
 
   @RelayMutation(() => Todo)
@@ -49,5 +58,10 @@ export class TodoResolver {
     @Args('query', { nullable: true }) query?: string,
   ): Promise<TodoConnection> {
     return this.cardService.findCardsByIds(args, todo.cards);
+  }
+
+  @ResolveField()
+  user(@Parent() todo: Todo): Promise<User> {
+    return this.userService.finduserById(todo.user);
   }
 }

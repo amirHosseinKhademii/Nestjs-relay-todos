@@ -10,11 +10,15 @@ import { v4 as uuid } from 'uuid';
 export class TodoService {
   constructor(@InjectRepository(Todo) private repo: Repository<Todo>) {}
 
-  async findAllTodos(args: ConnectionArgs): Promise<TodoConnection> {
+  async findAllTodos(
+    args: ConnectionArgs,
+    user: string,
+  ): Promise<TodoConnection> {
     const { limit, offset } = getPagingParameters(args);
     const [results, count] = await this.repo.findAndCount({
       take: limit,
       skip: offset,
+      where: { user: user },
     });
 
     return connectionFromArraySlice(results, args, {
@@ -27,10 +31,10 @@ export class TodoService {
     return await this.repo.findOneBy({ id });
   }
 
-  async addTodo(args: CreateTodoInput): Promise<Todo> {
+  async addTodo(args: CreateTodoInput, user: string): Promise<Todo> {
     const guid = uuid();
     const id = toGlobalId('Todo', guid);
-    const todo = await this.repo.create({ ...args, id });
+    const todo = await this.repo.create({ ...args, id, user });
     return await this.repo.save(todo);
   }
 

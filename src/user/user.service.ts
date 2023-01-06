@@ -21,15 +21,15 @@ export class UserService {
     private jwt: JwtService,
   ) {}
 
-  async getUsers() {
+  async findAllUsers() {
     return await this.repo.find();
   }
 
-  async getUser(id: string) {
+  async finduserById(id: string) {
     return await this.repo.findOneBy({ id });
   }
 
-  async createUser(body: CreateUserInput) {
+  async signupUser(body: CreateUserInput) {
     const hashed = await hasher(body.password);
     const user = await this.repo.create({
       ...body,
@@ -46,7 +46,7 @@ export class UserService {
     }
   }
 
-  async signin({ userName, password }: SigninUserInput): Promise<string> {
+  async signinUser({ userName, password }: SigninUserInput): Promise<string> {
     const user = await this.repo.findOneBy({ userName });
     if (user && (await bcrypt.compare(password, user.password)))
       return await this.jwt.sign({ userName });

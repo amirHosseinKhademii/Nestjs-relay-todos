@@ -57,6 +57,7 @@ type Todo implements Node {
   created_at: DateTime
   updated_at: DateTime
   cards(before: String, after: String, first: Float, last: Float, query: String): CardConnection!
+  user: User!
 }
 
 type TodoConnection {
@@ -84,6 +85,7 @@ type AddTodoPayload implements Node {
   created_at: DateTime
   updated_at: DateTime
   cards(before: String, after: String, first: Float, last: Float, query: String): CardConnection!
+  user: User!
   clientMutationId: String
 }
 
@@ -95,6 +97,7 @@ type UpdateTodoPayload implements Node {
   created_at: DateTime
   updated_at: DateTime
   cards(before: String, after: String, first: Float, last: Float, query: String): CardConnection!
+  user: User!
   clientMutationId: String
 }
 

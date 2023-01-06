@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { CardConnection } from 'src/card';
 import { NodeInterface, NodeType, CreateConnectionType } from 'src/relay';
+import { User } from 'src/user';
 import {
   Column,
   CreateDateColumn,
@@ -43,6 +44,10 @@ export class Todo implements NodeInterface {
   @Column({ default: [] })
   @Field(() => CardConnection)
   cards: string[];
+
+  @Column()
+  @Field(() => User)
+  user: string;
 }
 
 @ObjectType()
