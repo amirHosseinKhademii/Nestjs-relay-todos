@@ -6,7 +6,7 @@ import { connectionFromArraySlice } from 'graphql-relay';
 import { ConnectionArgs, getPagingParameters } from 'src/relay/connection.args';
 import { v4 as uuid } from 'uuid';
 import { toGlobalId } from 'graphql-relay';
-import { CreateCardInput } from './types/card-create.input';
+import { CreateCardInput } from './types/card.input';
 
 @Injectable()
 export class CardService {

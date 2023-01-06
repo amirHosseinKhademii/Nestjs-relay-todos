@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { connectionFromArraySlice, toGlobalId } from 'graphql-relay';
 import { ConnectionArgs, getPagingParameters } from 'src/relay/connection.args';
 import { Repository } from 'typeorm';
-import { TodoCreateArgs } from './types/todo.create.args';
+import { CreateTodoInput, UpdateTodoInput } from './types/todo.input';
 import { Todo, TodoConnection } from './types/todo.types';
 import { v4 as uuid } from 'uuid';
 @Injectable()
@@ -27,10 +27,19 @@ export class TodoService {
     return await this.repo.findOneBy({ id });
   }
 
-  async addTodo(args: TodoCreateArgs): Promise<Todo> {
+  async addTodo(args: CreateTodoInput): Promise<Todo> {
     const guid = uuid();
     const id = toGlobalId('Todo', guid);
     const todo = await this.repo.create({ ...args, id });
     return await this.repo.save(todo);
+  }
+
+  async updateTodo(args: UpdateTodoInput) {
+    const { id, ...body } = args;
+    const updated_at = new Date();
+    Object.keys(body).forEach((key) => body[key] === null && delete body[key]);
+    const todo = await this.repo.findOneByOrFail({ id });
+    const updatedTodo: Todo = { ...todo, ...body, updated_at };
+    return await this.repo.save(updatedTodo);
   }
 }
