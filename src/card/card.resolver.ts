@@ -4,7 +4,7 @@ import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
 import { AuthGraphGuard } from 'src/user';
 import { PubSub } from 'graphql-subscriptions';
 import { CardService } from './card.service';
-import { CreateCardInput } from './types/card.input';
+import { CreateCardInput, UpdateCardInput } from './types/card.input';
 import { AddCardPayload } from './types/card.response';
 import { Card, CardConnection } from './types/card.types';
 
@@ -31,8 +31,22 @@ export class CardResolver {
     return card;
   }
 
+  @RelayMutation(() => AddCardPayload)
+  async updateCard(@InputArg(() => UpdateCardInput) input: UpdateCardInput) {
+    const card = this.service.updateCard(input);
+    pubSub.publish('cardUpdated', {
+      cardUpdated: (await card).card,
+    });
+    return card;
+  }
+
   @Subscription(() => Card, { name: 'cardAdded' })
   cardAdded() {
     return pubSub.asyncIterator('cardAdded');
+  }
+
+  @Subscription(() => Card, { name: 'cardUpdated' })
+  todoUpdated() {
+    return pubSub.asyncIterator('cardUpdated');
   }
 }

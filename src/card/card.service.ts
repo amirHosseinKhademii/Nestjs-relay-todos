@@ -6,7 +6,7 @@ import { connectionFromArraySlice } from 'graphql-relay';
 import { ConnectionArgs, getPagingParameters } from 'src/relay';
 import { v4 as uuid } from 'uuid';
 import { toGlobalId } from 'graphql-relay';
-import { CreateCardInput } from './types/card.input';
+import { CreateCardInput, UpdateCardInput } from './types/card.input';
 import { TodoService } from 'src/todo';
 
 @Injectable()
@@ -43,6 +43,15 @@ export class CardService {
     });
     const reslut = await this.repo.save(card);
     return { card: reslut };
+  }
+
+  async updateCard(args: UpdateCardInput) {
+    const { id, ...body } = args;
+    Object.keys(body).forEach((key) => body[key] === null && delete body[key]);
+    const todo = await this.repo.findOneByOrFail({ id });
+    const updatedcard: Card = { ...todo, ...body };
+    const result = await this.repo.save(updatedcard);
+    return { card: result };
   }
 
   async findCardsByIds(

@@ -18,3 +18,21 @@ export class CreateCardInput {
   @Field({ nullable: true, defaultValue: '' })
   description?: string;
 }
+
+@InputType()
+export class UpdateCardInput {
+  @IsNotEmpty()
+  @IsString()
+  @Field(() => ID)
+  id: string;
+
+  @IsString()
+  @IsOptional()
+  @MinLength(2)
+  @Field({ nullable: true })
+  title: string;
+
+  @IsOptional()
+  @Field({ nullable: true })
+  description?: string;
+}
