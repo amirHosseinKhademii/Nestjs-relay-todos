@@ -25,16 +25,35 @@ import { Context } from 'graphql-ws';
       subscriptions: {
         'graphql-ws': {
           path: '/graphql',
-          //onConnect: (context: Context<any>) => context,
-        },
-        'subscriptions-transport-ws': {
-          path: '/graphql',
-          onConnect: (context) => {
-            //console.log(GqlExecutionContext.create(context));
+          onConnect: (contextSocket: Context<any>) => {
+            const context = contextSocket?.connectionParams;
 
             return context;
           },
         },
+        'subscriptions-transport-ws': {
+          path: '/graphql',
+          onConnect: (connectionParams: { [key: string]: any }) => {
+            const context = {
+              websocket: true,
+              headers: { authorization: connectionParams['Authorization'] },
+            };
+
+            return context;
+          },
+        },
+      },
+      context: (context) => {
+        const { req, res, connection } = context;
+        return connection
+          ? {
+              req: {
+                ...req,
+                ...connection.context,
+              },
+              res,
+            }
+          : context;
       },
     }),
     UserModule,
