@@ -1,13 +1,14 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
 import { AuthGraphGuard } from 'src/user';
-
+import { PubSub } from 'graphql-subscriptions';
 import { CardService } from './card.service';
 import { CreateCardInput } from './types/card.input';
 import { AddCardPayload } from './types/card.response';
 import { Card, CardConnection } from './types/card.types';
 
+const pubSub = new PubSub();
 @Resolver(() => Card)
 @UseGuards(new AuthGraphGuard())
 export class CardResolver {
@@ -22,7 +23,16 @@ export class CardResolver {
   }
 
   @RelayMutation(() => AddCardPayload)
-  addCard(@InputArg(() => CreateCardInput) input: CreateCardInput) {
-    return this.service.addCard(input);
+  async addCard(@InputArg(() => CreateCardInput) input: CreateCardInput) {
+    const card = this.service.addCard(input);
+    pubSub.publish('cardAdded', {
+      cardAdded: (await card).card,
+    });
+    return card;
+  }
+
+  @Subscription(() => Card, { name: 'cardAdded' })
+  cardAdded() {
+    return pubSub.asyncIterator('cardAdded');
   }
 }
