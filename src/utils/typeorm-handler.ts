@@ -2,7 +2,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 export const typeormConfig: TypeOrmModuleOptions = {
   type: 'mongodb',
-  url: 'mongodb://localhost/todos',
+  url: process.env.URL,
   synchronize: true,
   useUnifiedTopology: true,
 };
