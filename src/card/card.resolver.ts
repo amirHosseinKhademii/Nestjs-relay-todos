@@ -4,8 +4,16 @@ import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
 import { AuthGraphGuard } from 'src/user';
 import { PubSub } from 'graphql-subscriptions';
 import { CardService } from './card.service';
-import { CreateCardInput, UpdateCardInput } from './types/card.input';
-import { AddCardPayload, UpdateCardPayload } from './types/card.response';
+import {
+  CreateCardInput,
+  DeleteCardInput,
+  UpdateCardInput,
+} from './types/card.input';
+import {
+  AddCardPayload,
+  DeleteCardPayload,
+  UpdateCardPayload,
+} from './types/card.response';
 import { Card, CardConnection } from './types/card.types';
 
 const pubSub = new PubSub();
@@ -42,13 +50,22 @@ export class CardResolver {
     return card;
   }
 
+  @RelayMutation(() => DeleteCardPayload)
+  async deleteCard(@InputArg(() => DeleteCardInput) id: string) {
+    await this.service.deleteCardById(id);
+    pubSub.publish('cardDeleted', {
+      cardDeleted: id,
+    });
+    return id;
+  }
+
   @Subscription(() => Card, { name: 'cardAdded' })
   cardAdded() {
     return pubSub.asyncIterator('cardAdded');
   }
 
   @Subscription(() => Card, { name: 'cardUpdated' })
-  todoUpdated() {
+  cardUpdated() {
     return pubSub.asyncIterator('cardUpdated');
   }
 }

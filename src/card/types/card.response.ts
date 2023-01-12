@@ -1,7 +1,7 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Card } from './card.types';
 import { Edge, ConnectionCursor } from 'graphql-relay';
-
+import { NodeInterface } from 'src/relay';
 @ObjectType()
 export class UpdateCardPayload {
   @Field(() => Card)
@@ -23,6 +23,15 @@ export class CardResponseEdge implements Edge<Card> {
 export class AddCardPayload {
   @Field(() => CardResponseEdge)
   addCardEdge: CardResponseEdge;
+
+  @Field(() => String)
+  clientMutationId: string;
+}
+
+@ObjectType()
+export class DeleteCardPayload {
+  @Field(() => ID)
+  id: NodeInterface;
 
   @Field(() => String)
   clientMutationId: string;

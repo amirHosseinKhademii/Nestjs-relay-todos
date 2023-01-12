@@ -36,3 +36,11 @@ export class UpdateCardInput {
   @Field({ nullable: true })
   description?: string;
 }
+
+@InputType()
+export class DeleteCardInput {
+  @IsNotEmpty()
+  @IsString()
+  @Field(() => ID)
+  id: string;
+}

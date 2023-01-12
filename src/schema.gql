@@ -57,6 +57,11 @@ type UpdateCardPayload {
   clientMutationId: String
 }
 
+type DeleteCardPayload {
+  id: ID!
+  clientMutationId: String
+}
+
 type Todo implements Node {
   id: ID!
   title: String!
@@ -116,6 +121,7 @@ type Mutation {
   updateTodo(input: UpdateTodoInput!): UpdateTodoPayload
   addCard(input: AddCardInput!): AddCardPayload
   updateCard(input: UpdateCardInput!): UpdateCardPayload
+  deleteCard(input: DeleteCardInput!): DeleteCardPayload
 }
 
 input AddTodoInput {
@@ -143,6 +149,11 @@ input UpdateCardInput {
   id: ID!
   title: String
   description: String
+  clientMutationId: String
+}
+
+input DeleteCardInput {
+  id: ID!
   clientMutationId: String
 }
 

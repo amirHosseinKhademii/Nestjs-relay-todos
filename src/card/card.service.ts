@@ -77,4 +77,8 @@ export class CardService {
       sliceStart: offset || 0,
     });
   }
+
+  async deleteCardById(id: string) {
+    return await this.repo.delete(id);
+  }
 }
