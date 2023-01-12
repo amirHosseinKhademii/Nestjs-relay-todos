@@ -2,6 +2,8 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 import { Todo } from './todo.types';
 
+import { Edge, ConnectionCursor } from 'graphql-relay';
+
 @ObjectType()
 export class UpdateTodoPayload {
   @Field(() => Todo)
@@ -11,10 +13,19 @@ export class UpdateTodoPayload {
   clientMutationId: string;
 }
 
+@ObjectType(`TodoResponseEdge`, { isAbstract: true })
+export class TodoResponseEdge implements Edge<Todo> {
+  @Field({ nullable: true })
+  public cursor: ConnectionCursor;
+
+  @Field(() => Todo, { nullable: true })
+  public node!: Todo;
+}
+
 @ObjectType()
 export class AddTodoPayload {
-  @Field(() => Todo)
-  todo: Todo;
+  @Field(() => TodoResponseEdge)
+  addTodoEdge: TodoResponseEdge;
 
   @Field(() => String)
   clientMutationId: string;

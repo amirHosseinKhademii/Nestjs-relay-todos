@@ -46,7 +46,7 @@ export class TodoResolver {
   addTodo(
     @GetUser() user: User,
     @InputArg(() => CreateTodoInput) input: CreateTodoInput,
-  ) {
+  ): Promise<AddTodoPayload> {
     return this.service.addTodo(input, user.id);
   }
 

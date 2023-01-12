@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Card, CardConnection } from './types/card.types';
 import { connectionFromArraySlice } from 'graphql-relay';
-import { ConnectionArgs, getPagingParameters } from 'src/relay';
+import { ConnectionArgs, getPagingParameters, nextId } from 'src/relay';
 import { v4 as uuid } from 'uuid';
 import { toGlobalId } from 'graphql-relay';
 import { CreateCardInput, UpdateCardInput } from './types/card.input';
 import { TodoService } from 'src/todo';
+import { AddCardPayload } from './types/card.response';
 
 @Injectable()
 export class CardService {
@@ -33,7 +34,7 @@ export class CardService {
     return await this.repo.findOneBy({ id });
   }
 
-  async addCard(input: CreateCardInput) {
+  async addCard(input: CreateCardInput): Promise<AddCardPayload> {
     const guid = uuid();
     const id = toGlobalId('Card', guid);
     const card = await this.repo.create({ ...input, id });
@@ -41,8 +42,13 @@ export class CardService {
       todoId: input.todoId,
       cardId: id,
     });
-    const reslut = await this.repo.save(card);
-    return { card: reslut };
+    const result = await this.repo.save(card);
+    return {
+      addCardEdge: {
+        node: result,
+        cursor: nextId(id).toString(),
+      },
+    } as any;
   }
 
   async updateCard(args: UpdateCardInput) {

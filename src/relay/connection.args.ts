@@ -37,7 +37,7 @@ function checkPagingSanity(args: ConnectionArgs): PagingMeta {
 
 const getId = (cursor: ConnectionCursor) =>
   parseInt(fromGlobalId(cursor).id, 10);
-const nextId = (cursor: ConnectionCursor) => getId(cursor) + 1;
+export const nextId = (cursor: ConnectionCursor) => getId(cursor) + 1;
 
 export function getPagingParameters(args: ConnectionArgs) {
   const meta = checkPagingSanity(args);

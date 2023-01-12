@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { connectionFromArraySlice, toGlobalId } from 'graphql-relay';
-import { ConnectionArgs, getPagingParameters } from 'src/relay';
+import { ConnectionArgs, getPagingParameters, nextId } from 'src/relay';
 import { Repository } from 'typeorm';
 import { CreateTodoInput, UpdateTodoInput } from './types/todo.input';
 import { Todo, TodoConnection } from './types/todo.types';
 import { v4 as uuid } from 'uuid';
+import { AddTodoPayload } from './types/tood.response';
 
 @Injectable()
 export class TodoService {
@@ -32,12 +33,17 @@ export class TodoService {
     return await this.repo.findOneBy({ id });
   }
 
-  async addTodo(args: CreateTodoInput, user: string) {
+  async addTodo(args: CreateTodoInput, user: string): Promise<AddTodoPayload> {
     const guid = uuid();
     const id = toGlobalId('Todo', guid);
     const todo = await this.repo.create({ ...args, id, user });
     const result = await this.repo.save(todo);
-    return { todo: result };
+    return {
+      addTodoEdge: {
+        node: result,
+        cursor: nextId(id).toString(),
+      },
+    } as any;
   }
 
   async updateTodo(args: UpdateTodoInput) {

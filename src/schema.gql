@@ -43,8 +43,13 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type AddCardPayload {
-  card: Card!
+  addCardEdge: CardResponseEdge!
   clientMutationId: String
+}
+
+type CardResponseEdge {
+  cursor: String
+  node: Card
 }
 
 type UpdateCardPayload {
@@ -81,8 +86,13 @@ type TodoPageInfo {
 }
 
 type AddTodoPayload {
-  todo: Todo!
+  addTodoEdge: TodoResponseEdge!
   clientMutationId: String
+}
+
+type TodoResponseEdge {
+  cursor: String
+  node: Todo
 }
 
 type UpdateTodoPayload {

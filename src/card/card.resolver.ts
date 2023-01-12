@@ -5,7 +5,7 @@ import { AuthGraphGuard } from 'src/user';
 import { PubSub } from 'graphql-subscriptions';
 import { CardService } from './card.service';
 import { CreateCardInput, UpdateCardInput } from './types/card.input';
-import { AddCardPayload } from './types/card.response';
+import { AddCardPayload, UpdateCardPayload } from './types/card.response';
 import { Card, CardConnection } from './types/card.types';
 
 const pubSub = new PubSub();
@@ -23,15 +23,17 @@ export class CardResolver {
   }
 
   @RelayMutation(() => AddCardPayload)
-  async addCard(@InputArg(() => CreateCardInput) input: CreateCardInput) {
+  async addCard(
+    @InputArg(() => CreateCardInput) input: CreateCardInput,
+  ): Promise<AddCardPayload> {
     const card = this.service.addCard(input);
     pubSub.publish('cardAdded', {
-      cardAdded: (await card).card,
+      cardAdded: await card,
     });
     return card;
   }
 
-  @RelayMutation(() => AddCardPayload)
+  @RelayMutation(() => UpdateCardPayload)
   async updateCard(@InputArg(() => UpdateCardInput) input: UpdateCardInput) {
     const card = this.service.updateCard(input);
     pubSub.publish('cardUpdated', {
