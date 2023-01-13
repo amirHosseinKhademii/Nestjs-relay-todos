@@ -10,6 +10,7 @@ type Comment implements Node {
   id: ID!
   title: String!
   description: String
+  cardId: ID!
   created_at: DateTime
   updated_at: DateTime
 }
@@ -151,7 +152,7 @@ type Query {
   todos(before: String, after: String, first: Float, last: Float, query: String): TodoConnection!
   todo(id: ID!): Todo!
   cards(before: String, after: String, first: Float, last: Float, query: String): CardConnection!
-  comments(before: String, after: String, first: Float, last: Float, query: String): CommentConnection!
+  comments(before: String, after: String, first: Float, last: Float, cardId: ID!, query: String): CommentConnection!
 }
 
 type Mutation {

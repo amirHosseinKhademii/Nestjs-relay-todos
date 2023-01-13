@@ -27,6 +27,10 @@ export class Comment implements NodeInterface {
   @Column({ nullable: true, default: '' })
   description?: string;
 
+  @Field(() => ID!)
+  @Column()
+  cardId: string;
+
   @Field({ nullable: true })
   @CreateDateColumn({ update: false })
   created_at: Date;

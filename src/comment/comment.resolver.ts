@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver, ID } from '@nestjs/graphql';
 import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
 import { AuthGraphGuard } from 'src/user';
 import { CommentService } from './comment.service';
@@ -13,11 +13,12 @@ export class CommentResolver {
   constructor(private service: CommentService) {}
 
   @Query(() => CommentConnection, { name: 'comments' })
-  cards(
+  comments(
     @Args() args: ConnectionArgs,
+    @Args('cardId', { type: () => ID }) cardId: string,
     @Args('query', { nullable: true }) query?: string,
   ): Promise<CommentConnection> {
-    return this.service.findAllComments(args);
+    return this.service.findAllComments(args, cardId);
   }
 
   @RelayMutation(() => AddCommentPayload)

@@ -17,8 +17,11 @@ export class CommentService {
     @Inject(forwardRef(() => CardService)) private cardService: CardService,
   ) {}
 
-  async findAllComments(args: ConnectionArgs): Promise<CommentConnection> {
-    return await findAll(args, this.repo);
+  async findAllComments(
+    args: ConnectionArgs,
+    cardId: string,
+  ): Promise<CommentConnection> {
+    return await findAll(args, this.repo, { cardId });
   }
 
   async findCommentsByIds(
