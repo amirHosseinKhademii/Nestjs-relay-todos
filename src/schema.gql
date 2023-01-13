@@ -6,11 +6,10 @@ interface Node {
   id: ID!
 }
 
-type Card implements Node {
+type Comment implements Node {
   id: ID!
   title: String!
   description: String
-  isCompleted: Boolean
   created_at: DateTime
   updated_at: DateTime
 }
@@ -19,6 +18,41 @@ type Card implements Node {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type CommentConnection {
+  edges: [CommentEdge!]
+  pageInfo: CommentPageInfo
+}
+
+type CommentEdge {
+  cursor: String
+  node: Comment
+}
+
+type CommentPageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
+type User implements Node {
+  id: ID!
+  userName: String!
+  fullName: String!
+  created_at: DateTime
+  updated_at: DateTime
+}
+
+type Card implements Node {
+  id: ID!
+  title: String!
+  description: String
+  isCompleted: Boolean
+  comments(before: String, after: String, first: Float, last: Float, query: String): CommentConnection!
+  created_at: DateTime
+  updated_at: DateTime
+}
 
 type CardConnection {
   edges: [CardEdge!]
@@ -35,14 +69,6 @@ type CardPageInfo {
   endCursor: String
   hasPreviousPage: Boolean!
   hasNextPage: Boolean!
-}
-
-type User implements Node {
-  id: ID!
-  userName: String!
-  fullName: String!
-  created_at: DateTime
-  updated_at: DateTime
 }
 
 type AddCardPayload {
@@ -106,31 +132,6 @@ type TodoResponseEdge {
 type UpdateTodoPayload {
   todo: Todo!
   clientMutationId: String
-}
-
-type Comment implements Node {
-  id: ID!
-  title: String!
-  description: String
-  created_at: DateTime
-  updated_at: DateTime
-}
-
-type CommentConnection {
-  edges: [CommentEdge!]
-  pageInfo: CommentPageInfo
-}
-
-type CommentEdge {
-  cursor: String
-  node: Comment
-}
-
-type CommentPageInfo {
-  startCursor: String
-  endCursor: String
-  hasPreviousPage: Boolean!
-  hasNextPage: Boolean!
 }
 
 type Query {

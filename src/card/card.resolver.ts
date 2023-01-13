@@ -1,5 +1,13 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, ID, Query, Resolver, Subscription } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+  Subscription,
+} from '@nestjs/graphql';
 import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
 import { AuthGraphGuard } from 'src/user';
 import { PubSub } from 'graphql-subscriptions';
@@ -15,12 +23,16 @@ import {
   UpdateCardPayload,
 } from './types/card.response';
 import { Card, CardConnection } from './types/card.types';
+import { CommentService } from 'src/comment';
 
 const pubSub = new PubSub();
 @Resolver(() => Card)
 @UseGuards(new AuthGraphGuard())
 export class CardResolver {
-  constructor(private service: CardService) {}
+  constructor(
+    private service: CardService,
+    private CommentService: CommentService,
+  ) {}
 
   @Query(() => CardConnection, { name: 'cards' })
   cards(
@@ -54,6 +66,15 @@ export class CardResolver {
   async deleteCard(@InputArg(() => DeleteCardInput) id: string) {
     await this.service.deleteCardById(id);
     return id;
+  }
+
+  @ResolveField()
+  comments(
+    @Parent() card: Card,
+    @Args() args: ConnectionArgs,
+    @Args('query', { nullable: true }) query?: string,
+  ) {
+    return this.CommentService.findCommentsByIds(args, card.comments);
   }
 
   @Subscription(() => Card, { name: 'cardAdded' })

@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { CommentConnection } from 'src/comment';
 import { NodeInterface, CreateConnectionType, NodeType } from 'src/relay';
 import {
   Column,
@@ -30,6 +31,10 @@ export class Card implements NodeInterface {
   @Field({ nullable: true, defaultValue: false })
   @Column({ default: false })
   isCompleted: boolean;
+
+  @Column({ default: [] })
+  @Field(() => CommentConnection)
+  comments: string[];
 
   @Field({ nullable: true })
   @CreateDateColumn({ update: false })
