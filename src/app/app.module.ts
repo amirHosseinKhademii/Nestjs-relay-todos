@@ -5,17 +5,18 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { NodeResolver } from './node.resolver';
+import { mainContext, subscriptionsConfig, typeormConfig } from 'src/utils';
 import { User, UserModule } from 'src/user';
 import { Card, CardModule } from 'src/card';
 import { Todo, TodoModule } from 'src/todo';
-import { mainContext, subscriptionsConfig, typeormConfig } from 'src/utils';
+import { Comment, CommentModule } from 'src/comment';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       ...typeormConfig,
-      entities: [User, Card, Todo],
+      entities: [User, Card, Todo, Comment],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -27,6 +28,7 @@ import { mainContext, subscriptionsConfig, typeormConfig } from 'src/utils';
     UserModule,
     TodoModule,
     CardModule,
+    CommentModule,
   ],
   providers: [NodeResolver],
 })

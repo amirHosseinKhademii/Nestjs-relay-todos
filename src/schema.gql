@@ -108,6 +108,31 @@ type UpdateTodoPayload {
   clientMutationId: String
 }
 
+type Comment implements Node {
+  id: ID!
+  title: String!
+  description: String
+  created_at: DateTime
+  updated_at: DateTime
+}
+
+type CommentConnection {
+  edges: [CommentEdge!]
+  pageInfo: CommentPageInfo
+}
+
+type CommentEdge {
+  cursor: String
+  node: Comment
+}
+
+type CommentPageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
 type Query {
   node(id: ID!): Node
   users: [User!]!
@@ -115,6 +140,7 @@ type Query {
   todos(before: String, after: String, first: Float, last: Float, query: String): TodoConnection!
   todo(id: ID!): Todo!
   cards(before: String, after: String, first: Float, last: Float, query: String): CardConnection!
+  comments(before: String, after: String, first: Float, last: Float, query: String): CommentConnection!
 }
 
 type Mutation {
