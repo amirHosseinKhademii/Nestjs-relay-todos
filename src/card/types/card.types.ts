@@ -2,9 +2,11 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { NodeInterface, CreateConnectionType, NodeType } from 'src/relay';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ObjectIdColumn,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @NodeType('Card')
@@ -24,6 +26,18 @@ export class Card implements NodeInterface {
   @Field({ nullable: true, defaultValue: '' })
   @Column({ nullable: true, default: '' })
   description?: string;
+
+  @Field({ nullable: true, defaultValue: false })
+  @Column({ default: false })
+  isCompleted: boolean;
+
+  @Field({ nullable: true })
+  @CreateDateColumn({ update: false })
+  created_at: Date;
+
+  @Field({ nullable: true })
+  @UpdateDateColumn()
+  updated_at: Date;
 }
 
 @ObjectType()

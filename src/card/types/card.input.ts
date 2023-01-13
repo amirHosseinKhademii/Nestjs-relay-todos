@@ -1,5 +1,11 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 @InputType()
 export class CreateCardInput {
@@ -35,6 +41,11 @@ export class UpdateCardInput {
   @IsOptional()
   @Field({ nullable: true })
   description?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  @Field({ nullable: true })
+  isCompleted: boolean;
 }
 
 @InputType()

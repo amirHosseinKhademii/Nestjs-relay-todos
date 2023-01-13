@@ -53,9 +53,10 @@ export class CardService {
 
   async updateCard(args: UpdateCardInput) {
     const { id, ...body } = args;
+    const updated_at = new Date();
     Object.keys(body).forEach((key) => body[key] === null && delete body[key]);
     const todo = await this.repo.findOneByOrFail({ id });
-    const updatedcard: Card = { ...todo, ...body };
+    const updatedcard: Card = { ...todo, ...body, updated_at };
     const result = await this.repo.save(updatedcard);
     return { card: result };
   }
