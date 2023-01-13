@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver, Subscription } from '@nestjs/graphql';
+import { Args, ID, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
 import { AuthGraphGuard } from 'src/user';
 import { PubSub } from 'graphql-subscriptions';
@@ -53,9 +53,6 @@ export class CardResolver {
   @RelayMutation(() => DeleteCardPayload)
   async deleteCard(@InputArg(() => DeleteCardInput) id: string) {
     await this.service.deleteCardById(id);
-    pubSub.publish('cardDeleted', {
-      cardDeleted: id,
-    });
     return id;
   }
 
