@@ -51,6 +51,22 @@ export class CardService {
     } as any;
   }
 
+  async updateCommentInCardById({
+    commentId,
+    cardId,
+  }: {
+    commentId: string;
+    cardId: string;
+  }) {
+    const updated_at = new Date();
+    const card = await this.repo.findOneByOrFail({ id: cardId });
+    const comments = card.comments
+      ? [...card.comments, commentId]
+      : [commentId];
+    const updatedCard: Card = { ...card, comments, updated_at };
+    return await this.repo.save(updatedCard);
+  }
+
   async updateCard(args: UpdateCardInput) {
     const { id, ...body } = args;
     const updated_at = new Date();

@@ -44,6 +44,16 @@ type User implements Node {
   updated_at: DateTime
 }
 
+type AddCommentPayload {
+  addCommentEdge: CommentResponseEdge!
+  clientMutationId: String
+}
+
+type CommentResponseEdge {
+  cursor: String
+  node: Comment
+}
+
 type Card implements Node {
   id: ID!
   title: String!
@@ -152,6 +162,7 @@ type Mutation {
   addCard(input: AddCardInput!): AddCardPayload
   updateCard(input: UpdateCardInput!): UpdateCardPayload
   deleteCard(input: DeleteCardInput!): DeleteCardPayload
+  addComment(input: AddCommentInput!): AddCommentPayload
 }
 
 input AddTodoInput {
@@ -185,6 +196,13 @@ input UpdateCardInput {
 
 input DeleteCardInput {
   id: ID!
+  clientMutationId: String
+}
+
+input AddCommentInput {
+  cardId: ID!
+  title: String!
+  description: String = ""
   clientMutationId: String
 }
 
