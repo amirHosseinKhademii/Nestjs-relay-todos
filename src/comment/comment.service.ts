@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { connectionFromArraySlice } from 'graphql-relay';
-import { ConnectionArgs, getPagingParameters } from 'src/relay';
+import { ConnectionArgs } from 'src/relay';
+import { findAll } from 'src/services';
 import { Repository } from 'typeorm';
 import { Comment, CommentConnection } from './types';
 
@@ -10,33 +10,15 @@ export class CommentService {
   constructor(@InjectRepository(Comment) private repo: Repository<Comment>) {}
 
   async findAllComments(args: ConnectionArgs): Promise<CommentConnection> {
-    const { limit, offset } = getPagingParameters(args);
-    const [results, count] = await this.repo.findAndCount({
-      take: limit,
-      skip: offset,
-    });
-
-    return connectionFromArraySlice(results, args, {
-      arrayLength: count,
-      sliceStart: offset || 0,
-    });
+    return await findAll(args, this.repo);
   }
 
   async findCommentsByIds(
     args: ConnectionArgs,
     commentIds: string[],
   ): Promise<CommentConnection> {
-    const { limit, offset } = getPagingParameters(args);
-    const [results, count] = await this.repo.findAndCount({
-      take: limit,
-      skip: offset,
-      where: {
-        id: { $in: commentIds ?? [] } as any,
-      },
-    });
-    return connectionFromArraySlice(results, args, {
-      arrayLength: count,
-      sliceStart: offset || 0,
+    return await findAll(args, this.repo, {
+      id: { $in: commentIds ?? [] } as any,
     });
   }
 }

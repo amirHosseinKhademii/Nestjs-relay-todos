@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { connectionFromArraySlice, toGlobalId } from 'graphql-relay';
-import { ConnectionArgs, getPagingParameters, nextId } from 'src/relay';
+import { toGlobalId } from 'graphql-relay';
+import { ConnectionArgs, nextId } from 'src/relay';
 import { Repository } from 'typeorm';
 import { CreateTodoInput, UpdateTodoInput } from './types/todo.input';
 import { Todo, TodoConnection } from './types/todo.types';
 import { v4 as uuid } from 'uuid';
 import { AddTodoPayload } from './types/tood.response';
+import { findAll } from 'src/services';
 
 @Injectable()
 export class TodoService {
@@ -16,17 +17,7 @@ export class TodoService {
     args: ConnectionArgs,
     user: string,
   ): Promise<TodoConnection> {
-    const { limit, offset } = getPagingParameters(args);
-    const [results, count] = await this.repo.findAndCount({
-      take: limit,
-      skip: offset,
-      where: { user: user },
-    });
-
-    return connectionFromArraySlice(results, args, {
-      arrayLength: count,
-      sliceStart: offset || 0,
-    });
+    return await findAll(args, this.repo, { user: user });
   }
 
   async findTodoById(id: string) {

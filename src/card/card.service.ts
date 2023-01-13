@@ -2,13 +2,13 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Card, CardConnection } from './types/card.types';
-import { connectionFromArraySlice } from 'graphql-relay';
-import { ConnectionArgs, getPagingParameters, nextId } from 'src/relay';
+import { ConnectionArgs, nextId } from 'src/relay';
 import { v4 as uuid } from 'uuid';
 import { toGlobalId } from 'graphql-relay';
 import { CreateCardInput, UpdateCardInput } from './types/card.input';
 import { TodoService } from 'src/todo';
 import { AddCardPayload } from './types/card.response';
+import { findAll } from 'src/services';
 
 @Injectable()
 export class CardService {
@@ -18,15 +18,15 @@ export class CardService {
   ) {}
 
   async findAllCards(args: ConnectionArgs): Promise<CardConnection> {
-    const { limit, offset } = getPagingParameters(args);
-    const [results, count] = await this.repo.findAndCount({
-      take: limit,
-      skip: offset,
-    });
+    return await findAll(args, this.repo);
+  }
 
-    return connectionFromArraySlice(results, args, {
-      arrayLength: count,
-      sliceStart: offset || 0,
+  async findCardsByIds(
+    args: ConnectionArgs,
+    cardIds: string[],
+  ): Promise<CardConnection> {
+    return await findAll(args, this.repo, {
+      id: { $in: cardIds ?? [] } as any,
     });
   }
 
@@ -59,24 +59,6 @@ export class CardService {
     const updatedcard: Card = { ...todo, ...body, updated_at };
     const result = await this.repo.save(updatedcard);
     return { card: result };
-  }
-
-  async findCardsByIds(
-    args: ConnectionArgs,
-    cardIds: string[],
-  ): Promise<CardConnection> {
-    const { limit, offset } = getPagingParameters(args);
-    const [results, count] = await this.repo.findAndCount({
-      take: limit,
-      skip: offset,
-      where: {
-        id: { $in: cardIds ?? [] } as any,
-      },
-    });
-    return connectionFromArraySlice(results, args, {
-      arrayLength: count,
-      sliceStart: offset || 0,
-    });
   }
 
   async deleteCardById(id: string) {
