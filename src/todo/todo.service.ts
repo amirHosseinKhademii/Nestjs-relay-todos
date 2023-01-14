@@ -60,4 +60,8 @@ export class TodoService {
     const updatedTodo: Todo = { ...todo, cards, updated_at };
     return await this.repo.save(updatedTodo);
   }
+
+  async deleteTodoById(id: string) {
+    return await this.repo.delete(id);
+  }
 }

@@ -145,6 +145,11 @@ type UpdateTodoPayload {
   clientMutationId: String
 }
 
+type DeleteTodoPayload {
+  id: ID!
+  clientMutationId: String
+}
+
 type Query {
   node(id: ID!): Node
   users: [User!]!
@@ -160,6 +165,7 @@ type Mutation {
   signIn(userName: String!, password: String!): String!
   addTodo(input: AddTodoInput!): AddTodoPayload
   updateTodo(input: UpdateTodoInput!): UpdateTodoPayload
+  deleteTodo(input: DeleteTodoInput!): DeleteTodoPayload
   addCard(input: AddCardInput!): AddCardPayload
   updateCard(input: UpdateCardInput!): UpdateCardPayload
   deleteCard(input: DeleteCardInput!): DeleteCardPayload
@@ -177,6 +183,11 @@ input UpdateTodoInput {
   title: String
   description: String
   isCompleted: Boolean
+  clientMutationId: String
+}
+
+input DeleteTodoInput {
+  id: ID!
   clientMutationId: String
 }
 

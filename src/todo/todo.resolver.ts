@@ -14,9 +14,17 @@ import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
 import { AuthGraphGuard, GetUser, User } from 'src/user';
 import { UserService } from 'src/user/user.service';
 import { TodoService } from './todo.service';
-import { CreateTodoInput, UpdateTodoInput } from './types/todo.input';
+import {
+  CreateTodoInput,
+  DeleteTodoInput,
+  UpdateTodoInput,
+} from './types/todo.input';
 import { Todo, TodoConnection } from './types/todo.types';
-import { AddTodoPayload, UpdateTodoPayload } from './types/tood.response';
+import {
+  AddTodoPayload,
+  DeleteTodoPayload,
+  UpdateTodoPayload,
+} from './types/tood.response';
 
 const pubSub = new PubSub();
 @Resolver(() => Todo)
@@ -57,6 +65,12 @@ export class TodoResolver {
       todoUpdated: (await todo).todo,
     });
     return todo;
+  }
+
+  @RelayMutation(() => DeleteTodoPayload)
+  async deleteTodo(@InputArg(() => DeleteTodoInput) id: string) {
+    await this.service.deleteTodoById(id);
+    return id;
   }
 
   @ResolveField()

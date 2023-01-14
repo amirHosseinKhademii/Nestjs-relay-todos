@@ -42,3 +42,11 @@ export class UpdateTodoInput {
   @Field({ nullable: true })
   isCompleted: boolean;
 }
+
+@InputType()
+export class DeleteTodoInput {
+  @IsNotEmpty()
+  @IsString()
+  @Field(() => ID)
+  id: string;
+}
