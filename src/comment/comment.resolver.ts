@@ -4,8 +4,11 @@ import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
 import { AuthGraphGuard } from 'src/user';
 import { CommentService } from './comment.service';
 import { CommentConnection } from './types';
-import { CreateCommentInput } from './types/comment.input';
-import { AddCommentPayload } from './types/comment.response';
+import { CreateCommentInput, DeleteCommentInput } from './types/comment.input';
+import {
+  AddCommentPayload,
+  DeleteCommentPayload,
+} from './types/comment.response';
 
 @Resolver()
 @UseGuards(new AuthGraphGuard())
@@ -30,5 +33,11 @@ export class CommentResolver {
     //   cardAdded: await card,
     // });
     return comment;
+  }
+
+  @RelayMutation(() => DeleteCommentPayload)
+  async deleteComment(@InputArg(() => DeleteCommentInput) id: string) {
+    await this.service.deleteCommentById(id);
+    return id;
   }
 }

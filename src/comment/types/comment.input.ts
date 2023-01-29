@@ -18,3 +18,11 @@ export class CreateCommentInput {
   @Field({ nullable: true, defaultValue: '' })
   description?: string;
 }
+
+@InputType()
+export class DeleteCommentInput {
+  @IsNotEmpty()
+  @IsString()
+  @Field(() => ID)
+  id: string;
+}

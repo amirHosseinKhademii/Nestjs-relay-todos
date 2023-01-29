@@ -1,5 +1,6 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { ConnectionCursor, Edge } from 'graphql-relay';
+import { NodeInterface } from 'src/relay';
 import { Comment } from './comment.types';
 
 @ObjectType(`CommentResponseEdge`, { isAbstract: true })
@@ -15,6 +16,15 @@ export class CommentResponseEdge implements Edge<Comment> {
 export class AddCommentPayload {
   @Field(() => CommentResponseEdge)
   addCommentEdge: CommentResponseEdge;
+
+  @Field(() => String)
+  clientMutationId: string;
+}
+
+@ObjectType()
+export class DeleteCommentPayload {
+  @Field(() => ID)
+  id: NodeInterface;
 
   @Field(() => String)
   clientMutationId: string;

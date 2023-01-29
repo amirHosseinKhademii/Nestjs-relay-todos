@@ -49,4 +49,8 @@ export class CommentService {
       },
     } as any;
   }
+
+  async deleteCommentById(id: string) {
+    return await this.repo.delete(id);
+  }
 }
