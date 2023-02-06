@@ -1,9 +1,17 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver, ID } from '@nestjs/graphql';
+import {
+  Args,
+  Query,
+  Resolver,
+  ID,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
-import { AuthGraphGuard } from 'src/user';
+import { AuthGraphGuard, User } from 'src/user';
+import { UserService } from 'src/user/user.service';
 import { CommentService } from './comment.service';
-import { CommentConnection } from './types';
+import { CommentConnection, Comment } from './types';
 import {
   CreateCommentInput,
   DeleteCommentInput,
@@ -15,10 +23,13 @@ import {
   LikeCommentPayload,
 } from './types/comment.response';
 
-@Resolver()
+@Resolver(() => Comment)
 @UseGuards(new AuthGraphGuard())
 export class CommentResolver {
-  constructor(private service: CommentService) {}
+  constructor(
+    private service: CommentService,
+  ) // private userService: UserService,
+  {}
 
   @Query(() => CommentConnection, { name: 'comments' })
   comments(
@@ -50,4 +61,9 @@ export class CommentResolver {
   async likeComment(@InputArg(() => LikeCommentInput) input: LikeCommentInput) {
     return await this.service.likeComment(input);
   }
+
+  // @ResolveField(() => [User])
+  // likes(@Parent() comment: Comment) {
+  //   return this.userService.findUsersByIds(comment.likes);
+  // }
 }

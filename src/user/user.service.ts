@@ -29,6 +29,14 @@ export class UserService {
     return await this.repo.findOneBy({ id });
   }
 
+  async findUsersByIds(userIds: string[]): Promise<User[]> {
+    return await this.repo.find({
+      where: {
+        id: { $in: userIds ?? [] } as any,
+      },
+    });
+  }
+
   async signupUser(body: CreateUserInput) {
     const hashed = await hasher(body.password);
     const user = await this.repo.create({

@@ -164,6 +164,7 @@ type DeleteTodoPayload {
 type Query {
   node(id: ID!): Node
   users: [User!]!
+  usersByIds: [User!]!
   user(userId: String!): User!
   todos(before: String, after: String, first: Float, last: Float, query: String): TodoConnection!
   todo(id: ID!): Todo!

@@ -12,6 +12,11 @@ export class UserResolver {
     return this.service.findAllUsers();
   }
 
+  @Query(() => [User])
+  usersByIds(ids: string[]) {
+    return this.service.findUsersByIds(ids);
+  }
+
   @Query(() => User)
   user(@Args('userId') id: string) {
     return this.service.finduserById(id);
