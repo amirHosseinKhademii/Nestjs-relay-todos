@@ -8,7 +8,7 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
-import { AuthGraphGuard, User } from 'src/user';
+import { AuthGraphGuard, GetUser, User } from 'src/user';
 import { UserService } from 'src/user/user.service';
 import { CommentService } from './comment.service';
 import { CommentConnection, Comment } from './types';
@@ -27,9 +27,8 @@ import {
 @UseGuards(new AuthGraphGuard())
 export class CommentResolver {
   constructor(
-    private service: CommentService,
-  ) // private userService: UserService,
-  {}
+    private service: CommentService, // private userService: UserService,
+  ) {}
 
   @Query(() => CommentConnection, { name: 'comments' })
   comments(
@@ -58,8 +57,11 @@ export class CommentResolver {
   }
 
   @RelayMutation(() => LikeCommentPayload)
-  async likeComment(@InputArg(() => LikeCommentInput) input: LikeCommentInput) {
-    return await this.service.likeComment(input);
+  async likeComment(
+    @GetUser() user: User,
+    @InputArg(() => LikeCommentInput) input: LikeCommentInput,
+  ) {
+    return await this.service.likeComment(input, user.id);
   }
 
   // @ResolveField(() => [User])

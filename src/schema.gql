@@ -240,7 +240,6 @@ input DeleteCommentInput {
 
 input LikeCommentInput {
   id: ID!
-  userId: ID!
   isLiked: Boolean!
   clientMutationId: String
 }

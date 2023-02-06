@@ -58,8 +58,8 @@ export class CommentService {
     return await this.repo.delete(id);
   }
 
-  async likeComment(args: LikeCommentInput) {
-    const { id, userId, isLiked } = args;
+  async likeComment(args: LikeCommentInput, userId: string) {
+    const { id, isLiked } = args;
     const updated_at = new Date();
     const comment = await this.repo.findOneByOrFail({ id });
     const likes = isLiked
