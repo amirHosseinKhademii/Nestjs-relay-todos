@@ -28,8 +28,8 @@ export class UserService {
     private jwt: JwtService,
   ) {}
 
-  async findAllUsers() {
-    return await this.repo.find();
+  async findAllUsers(args: ConnectionArgs): Promise<UsersConnection> {
+    return await findAll(args, this.repo);
   }
 
   async finduserById(id: string) {
@@ -71,10 +71,7 @@ export class UserService {
     else throw new UnauthorizedException('Check your credentials.');
   }
 
-  async followOrUnfollowUser(
-    { id }: FollowInput,
-    followerId: string,
-  ): Promise<FollowPayload> {
+  async followOrUnfollowUser({ id }: FollowInput, followerId: string) {
     const updated_at = new Date();
 
     const followerUser = await this.repo.findOneByOrFail({ id: followerId });
@@ -99,10 +96,7 @@ export class UserService {
     const resultFollower = await this.repo.save(updatedFollower);
 
     return {
-      followUserEdge: {
-        node: resultUser,
-        cursor: nextId(id).toString(),
-      },
-    } as any;
+      user: resultUser,
+    };
   }
 }

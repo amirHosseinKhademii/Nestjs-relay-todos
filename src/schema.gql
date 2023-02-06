@@ -66,13 +66,8 @@ type UserPageInfo {
 }
 
 type FollowOrUnfollowPayload {
-  followUserEdge: UserResponseEdge!
+  user: User!
   clientMutationId: String
-}
-
-type UserResponseEdge {
-  cursor: String
-  node: User
 }
 
 type AddCommentPayload {
@@ -193,7 +188,7 @@ type DeleteTodoPayload {
 type Query {
   node(id: ID!): Node
   nodes(ids: ID!): [Node!]
-  users: [User!]!
+  users(before: String, after: String, first: Float, last: Float, query: String): UsersConnection!
   usersByIds(before: String, after: String, first: Float, last: Float, ids: [ID!]!, query: String): UsersConnection!
   user(userId: String!): User!
   todos(before: String, after: String, first: Float, last: Float, query: String): TodoConnection!

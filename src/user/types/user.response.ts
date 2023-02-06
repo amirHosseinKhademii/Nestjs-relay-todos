@@ -17,8 +17,8 @@ export class UserResponseEdge implements Edge<User> {
 
 @ObjectType()
 export class FollowPayload {
-  @Field(() => UserResponseEdge)
-  followUserEdge: UserResponseEdge;
+  @Field(() => User)
+  user: User;
 
   @Field(() => String)
   clientMutationId: string;

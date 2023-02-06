@@ -16,9 +16,12 @@ import { AuthGraphGuard } from './guards';
 export class UserResolver {
   constructor(private service: UserService) {}
 
-  @Query(() => [User])
-  users() {
-    return this.service.findAllUsers();
+  @Query(() => UsersConnection, { name: 'users' })
+  users(
+    @Args() args: ConnectionArgs,
+    @Args('query', { nullable: true }) query?: string,
+  ) {
+    return this.service.findAllUsers(args);
   }
 
   @Query(() => UsersConnection, { name: 'usersByIds' })
@@ -50,7 +53,7 @@ export class UserResolver {
   async followOrUnfollow(
     @GetUser() user: User,
     @InputArg(() => FollowInput) input: FollowInput,
-  ): Promise<FollowPayload> {
+  ) {
     return await this.service.followOrUnfollowUser(input, user.id);
   }
 }
