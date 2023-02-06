@@ -23,20 +23,18 @@ export class NodeFieldResolver {
     return this.resolveNode(id);
   }
 
-  //   @Query(returnsNodeInterfaces, {
-  //     name: 'nodes',
-  //     description: 'Fetches objects given their IDs',
-  //     nullable: 'items',
-  //   })
-  //   nodes(
-  //     @Args({
-  //       name: 'ids',
-  //       nullable: false,
-  //       description: 'The IDs of objects',
-  //       type: () => ID,
-  //     })
-  //     ids: string[],
-  //   ): Promise<ResolvedNode[]> {
-  //     return Promise.all(ids.map((id) => Promise.resolve(this.resolveNode(id))));
-  //   }
+  @Query(() => [NodeInterface], {
+    name: 'nodes',
+    nullable: true,
+  })
+  nodes(
+    @Args({
+      name: 'ids',
+      nullable: false,
+      type: () => ID,
+    })
+    ids: string[],
+  ) {
+    return Promise.all(ids.map((id) => Promise.resolve(this.resolveNode(id))));
+  }
 }

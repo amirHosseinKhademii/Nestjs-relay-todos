@@ -5,7 +5,7 @@ import { ConnectionArgs, nextId } from 'src/relay';
 import { findAll } from 'src/services';
 import { Repository } from 'typeorm';
 import { Comment, CommentConnection } from './types';
-import { CreateCommentInput } from './types/comment.input';
+import { CreateCommentInput, LikeCommentInput } from './types/comment.input';
 import { AddCommentPayload } from './types/comment.response';
 import { v4 as uuid } from 'uuid';
 import { toGlobalId } from 'graphql-relay';
@@ -24,6 +24,10 @@ export class CommentService {
     return await findAll(args, this.repo, { cardId });
   }
 
+  async findCommentById(id: string) {
+    return await this.repo.findOneBy({ id });
+  }
+
   async findCommentsByIds(
     args: ConnectionArgs,
     commentIds: string[],
@@ -36,7 +40,7 @@ export class CommentService {
   async addComment(input: CreateCommentInput): Promise<AddCommentPayload> {
     const guid = uuid();
     const id = toGlobalId('Comment', guid);
-    const comment = await this.repo.create({ ...input, id });
+    const comment = await this.repo.create({ ...input, likes: [], id });
     const result = await this.repo.save(comment);
     await this.cardService.updateCommentInCardById({
       commentId: id,
@@ -52,5 +56,18 @@ export class CommentService {
 
   async deleteCommentById(id: string) {
     return await this.repo.delete(id);
+  }
+
+  async likeComment(args: LikeCommentInput, userId: string) {
+    const { id } = args;
+    const updated_at = new Date();
+    const comment = await this.repo.findOneByOrFail({ id });
+    const isLiked = comment.likes.includes(userId);
+    const likes = !isLiked
+      ? [...comment.likes, userId]
+      : comment.likes.filter((like) => like !== userId);
+    const updatedComment: Comment = { ...comment, updated_at, likes };
+    const result = await this.repo.save(updatedComment);
+    return { comment: result };
   }
 }

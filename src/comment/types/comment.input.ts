@@ -1,5 +1,11 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 @InputType()
 export class CreateCommentInput {
@@ -21,6 +27,14 @@ export class CreateCommentInput {
 
 @InputType()
 export class DeleteCommentInput {
+  @IsNotEmpty()
+  @IsString()
+  @Field(() => ID)
+  id: string;
+}
+
+@InputType()
+export class LikeCommentInput {
   @IsNotEmpty()
   @IsString()
   @Field(() => ID)

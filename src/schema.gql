@@ -13,6 +13,7 @@ type Comment implements Node {
   cardId: ID!
   created_at: DateTime
   updated_at: DateTime
+  likes: [ID!]!
 }
 
 """
@@ -45,6 +46,23 @@ type User implements Node {
   updated_at: DateTime
 }
 
+type UsersConnection {
+  edges: [UserEdge!]
+  pageInfo: UserPageInfo
+}
+
+type UserEdge {
+  cursor: String
+  node: User
+}
+
+type UserPageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
 type AddCommentPayload {
   addCommentEdge: CommentResponseEdge!
   clientMutationId: String
@@ -57,6 +75,11 @@ type CommentResponseEdge {
 
 type DeleteCommentPayload {
   id: ID!
+  clientMutationId: String
+}
+
+type LikeCommentPayload {
+  comment: Comment!
   clientMutationId: String
 }
 
@@ -157,7 +180,9 @@ type DeleteTodoPayload {
 
 type Query {
   node(id: ID!): Node
+  nodes(ids: ID!): [Node!]
   users: [User!]!
+  usersByIds(before: String, after: String, first: Float, last: Float, ids: [ID!]!, query: String): UsersConnection!
   user(userId: String!): User!
   todos(before: String, after: String, first: Float, last: Float, query: String): TodoConnection!
   todo(id: ID!): Todo!
@@ -176,6 +201,7 @@ type Mutation {
   deleteCard(input: DeleteCardInput!): DeleteCardPayload
   addComment(input: AddCommentInput!): AddCommentPayload
   deleteComment(input: DeleteCommentInput!): DeleteCommentPayload
+  likeComment(input: LikeCommentInput!): LikeCommentPayload
 }
 
 input AddTodoInput {
@@ -225,6 +251,11 @@ input AddCommentInput {
 }
 
 input DeleteCommentInput {
+  id: ID!
+  clientMutationId: String
+}
+
+input LikeCommentInput {
   id: ID!
   clientMutationId: String
 }

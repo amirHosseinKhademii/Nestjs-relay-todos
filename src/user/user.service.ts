@@ -13,6 +13,9 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CreateUserInput, SigninUserInput } from './types/user.input';
 import { toGlobalId } from 'graphql-relay';
+import { ConnectionArgs } from 'src/relay';
+import { findAll } from 'src/services';
+import { UsersConnection } from './types/user.response';
 
 @Injectable()
 export class UserService {
@@ -27,6 +30,15 @@ export class UserService {
 
   async finduserById(id: string) {
     return await this.repo.findOneBy({ id });
+  }
+
+  async findUsersByIds(
+    args: ConnectionArgs,
+    ids: string[],
+  ): Promise<UsersConnection> {
+    return await findAll(args, this.repo, {
+      id: { $in: ids ?? [] } as any,
+    });
   }
 
   async signupUser(body: CreateUserInput) {

@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { NodeInterface, CreateConnectionType, NodeType } from 'src/relay';
+import { User } from 'src/user';
 import {
   Column,
   CreateDateColumn,
@@ -38,6 +39,10 @@ export class Comment implements NodeInterface {
   @Field({ nullable: true })
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Field(() => [ID], { defaultValue: [] })
+  @Column({ default: [] })
+  likes: string[];
 }
 
 @ObjectType()

@@ -1,7 +1,9 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { CreateUserInput, SigninUserInput } from './types/user.input';
 import { User } from './types';
+import { UsersConnection } from './types/user.response';
+import { ConnectionArgs } from 'src/relay';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -10,6 +12,15 @@ export class UserResolver {
   @Query(() => [User])
   users() {
     return this.service.findAllUsers();
+  }
+
+  @Query(() => UsersConnection, { name: 'usersByIds' })
+  usersByIds(
+    @Args() args: ConnectionArgs,
+    @Args('ids', { type: () => [ID] }) ids: string[],
+    @Args('query', { nullable: true }) query?: string,
+  ) {
+    return this.service.findUsersByIds(args, ids);
   }
 
   @Query(() => User)

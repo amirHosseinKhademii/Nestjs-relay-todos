@@ -4,9 +4,14 @@ import { CommentResolver } from './comment.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Comment } from './types';
 import { CardModule } from 'src/card';
+import { UserModule } from 'src/user';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Comment]), forwardRef(() => CardModule)],
+  imports: [
+    TypeOrmModule.forFeature([Comment]),
+    forwardRef(() => CardModule),
+    //UserModule,
+  ],
   providers: [CommentService, CommentResolver],
   exports: [CommentService],
 })
