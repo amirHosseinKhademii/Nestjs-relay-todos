@@ -46,6 +46,23 @@ type User implements Node {
   updated_at: DateTime
 }
 
+type UsersConnection {
+  edges: [UserEdge!]
+  pageInfo: UserPageInfo
+}
+
+type UserEdge {
+  cursor: String
+  node: User
+}
+
+type UserPageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
 type AddCommentPayload {
   addCommentEdge: CommentResponseEdge!
   clientMutationId: String
@@ -165,7 +182,7 @@ type Query {
   node(id: ID!): Node
   nodes(ids: ID!): [Node!]
   users: [User!]!
-  usersByIds(ids: [ID!]!): [User!]!
+  usersByIds(before: String, after: String, first: Float, last: Float, ids: [ID!]!, query: String): UsersConnection!
   user(userId: String!): User!
   todos(before: String, after: String, first: Float, last: Float, query: String): TodoConnection!
   todo(id: ID!): Todo!

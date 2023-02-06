@@ -36,10 +36,3 @@ export class CreateUserInput {
   @MinLength(5)
   password: string;
 }
-
-@ArgsType()
-export class GetUsersByIdsInput {
-  @Field(() => [ID])
-  @IsArray()
-  ids: string[];
-}
