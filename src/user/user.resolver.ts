@@ -1,6 +1,10 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { CreateUserInput, SigninUserInput } from './types/user.input';
+import {
+  CreateUserInput,
+  GetUsersByIdsInput,
+  SigninUserInput,
+} from './types/user.input';
 import { User } from './types';
 
 @Resolver(() => User)
@@ -13,7 +17,7 @@ export class UserResolver {
   }
 
   @Query(() => [User])
-  usersByIds(ids: string[]) {
+  usersByIds(@Args() { ids }: GetUsersByIdsInput) {
     return this.service.findUsersByIds(ids);
   }
 

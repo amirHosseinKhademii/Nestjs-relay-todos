@@ -24,6 +24,10 @@ export class CommentService {
     return await findAll(args, this.repo, { cardId });
   }
 
+  async findCommentById(id: string) {
+    return await this.repo.findOneBy({ id });
+  }
+
   async findCommentsByIds(
     args: ConnectionArgs,
     commentIds: string[],
