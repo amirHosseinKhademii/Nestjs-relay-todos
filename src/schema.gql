@@ -13,6 +13,7 @@ type Comment implements Node {
   cardId: ID!
   created_at: DateTime
   updated_at: DateTime
+  likes: [ID!]!
 }
 
 """
@@ -57,6 +58,11 @@ type CommentResponseEdge {
 
 type DeleteCommentPayload {
   id: ID!
+  clientMutationId: String
+}
+
+type LikeCommentPayload {
+  comment: Comment!
   clientMutationId: String
 }
 
@@ -176,6 +182,7 @@ type Mutation {
   deleteCard(input: DeleteCardInput!): DeleteCardPayload
   addComment(input: AddCommentInput!): AddCommentPayload
   deleteComment(input: DeleteCommentInput!): DeleteCommentPayload
+  likeComment(input: LikeCommentInput!): LikeCommentPayload
 }
 
 input AddTodoInput {
@@ -226,6 +233,13 @@ input AddCommentInput {
 
 input DeleteCommentInput {
   id: ID!
+  clientMutationId: String
+}
+
+input LikeCommentInput {
+  id: ID!
+  userId: ID!
+  isLiked: Boolean!
   clientMutationId: String
 }
 

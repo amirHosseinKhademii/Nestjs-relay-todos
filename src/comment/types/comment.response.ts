@@ -29,3 +29,12 @@ export class DeleteCommentPayload {
   @Field(() => String)
   clientMutationId: string;
 }
+
+@ObjectType()
+export class LikeCommentPayload {
+  @Field(() => Comment)
+  comment: Comment;
+
+  @Field(() => String)
+  clientMutationId: string;
+}

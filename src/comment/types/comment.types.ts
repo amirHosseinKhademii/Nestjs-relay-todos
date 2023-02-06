@@ -38,6 +38,10 @@ export class Comment implements NodeInterface {
   @Field({ nullable: true })
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Field(() => [ID], { defaultValue: [] })
+  @Column({ default: [] })
+  likes: string[];
 }
 
 @ObjectType()
