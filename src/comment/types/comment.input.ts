@@ -39,9 +39,4 @@ export class LikeCommentInput {
   @IsString()
   @Field(() => ID)
   id: string;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  @Field()
-  isLiked: boolean;
 }

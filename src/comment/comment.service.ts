@@ -59,10 +59,11 @@ export class CommentService {
   }
 
   async likeComment(args: LikeCommentInput, userId: string) {
-    const { id, isLiked } = args;
+    const { id } = args;
     const updated_at = new Date();
     const comment = await this.repo.findOneByOrFail({ id });
-    const likes = isLiked
+    const isLiked = comment.likes.includes(userId);
+    const likes = !isLiked
       ? [...comment.likes, userId]
       : comment.likes.filter((like) => like !== userId);
     const updatedComment: Comment = { ...comment, updated_at, likes };
