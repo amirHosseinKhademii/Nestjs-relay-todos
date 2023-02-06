@@ -37,4 +37,12 @@ export class User implements NodeInterface {
   @Field({ nullable: true })
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Column({ default: [] })
+  @Field(() => [ID], { defaultValue: [] })
+  followers: string[];
+
+  @Column({ default: [] })
+  @Field(() => [ID], { defaultValue: [] })
+  followings: string[];
 }

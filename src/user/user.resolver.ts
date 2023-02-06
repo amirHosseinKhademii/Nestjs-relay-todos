@@ -1,9 +1,16 @@
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { CreateUserInput, SigninUserInput } from './types/user.input';
+import {
+  CreateUserInput,
+  FollowInput,
+  SigninUserInput,
+} from './types/user.input';
 import { User } from './types';
-import { UsersConnection } from './types/user.response';
-import { ConnectionArgs } from 'src/relay';
+import { FollowPayload, UsersConnection } from './types/user.response';
+import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
+import { GetUser } from './decorators';
+import { UseGuards } from '@nestjs/common';
+import { AuthGraphGuard } from './guards';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -36,5 +43,14 @@ export class UserResolver {
   @Mutation(() => String)
   signIn(@Args() body: SigninUserInput) {
     return this.service.signinUser(body);
+  }
+
+  @UseGuards(new AuthGraphGuard())
+  @RelayMutation(() => FollowPayload)
+  async followOrUnfollow(
+    @GetUser() user: User,
+    @InputArg(() => FollowInput) input: FollowInput,
+  ): Promise<FollowPayload> {
+    return await this.service.followOrUnfollowUser(input, user.id);
   }
 }

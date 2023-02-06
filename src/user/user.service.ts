@@ -11,11 +11,15 @@ import { v4 as uuid } from 'uuid';
 import { hasher } from './utils';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { CreateUserInput, SigninUserInput } from './types/user.input';
+import {
+  CreateUserInput,
+  FollowInput,
+  SigninUserInput,
+} from './types/user.input';
 import { toGlobalId } from 'graphql-relay';
-import { ConnectionArgs } from 'src/relay';
+import { ConnectionArgs, nextId } from 'src/relay';
 import { findAll } from 'src/services';
-import { UsersConnection } from './types/user.response';
+import { FollowPayload, UsersConnection } from './types/user.response';
 
 @Injectable()
 export class UserService {
@@ -47,6 +51,8 @@ export class UserService {
       ...body,
       password: hashed,
       id: toGlobalId('User', uuid()),
+      followers: [],
+      followings: [],
     });
     try {
       await this.repo.save(user);
@@ -63,5 +69,40 @@ export class UserService {
     if (user && (await bcrypt.compare(password, user.password)))
       return await this.jwt.sign({ userName });
     else throw new UnauthorizedException('Check your credentials.');
+  }
+
+  async followOrUnfollowUser(
+    { id }: FollowInput,
+    followerId: string,
+  ): Promise<FollowPayload> {
+    const updated_at = new Date();
+
+    const followerUser = await this.repo.findOneByOrFail({ id: followerId });
+
+    const user = await this.repo.findOneByOrFail({ id });
+
+    const isFollowed = user.followers.includes(followerId);
+
+    const isFollowing = followerUser.followings.includes(id);
+
+    const followers = !isFollowed
+      ? [...user.followers, followerId]
+      : user.followers.filter((follow) => follow !== followerId);
+
+    const followings = !isFollowing
+      ? [...followerUser.followings, id]
+      : followerUser.followings.filter((follow) => follow !== id);
+
+    const updatedUser: User = { ...user, updated_at, followers };
+    const updatedFollower: User = { ...followerUser, updated_at, followings };
+    const resultUser = await this.repo.save(updatedUser);
+    const resultFollower = await this.repo.save(updatedFollower);
+
+    return {
+      followUserEdge: {
+        node: resultUser,
+        cursor: nextId(id).toString(),
+      },
+    } as any;
   }
 }

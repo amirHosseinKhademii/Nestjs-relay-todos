@@ -44,6 +44,8 @@ type User implements Node {
   fullName: String!
   created_at: DateTime
   updated_at: DateTime
+  followers: [ID!]!
+  followings: [ID!]!
 }
 
 type UsersConnection {
@@ -61,6 +63,16 @@ type UserPageInfo {
   endCursor: String
   hasPreviousPage: Boolean!
   hasNextPage: Boolean!
+}
+
+type FollowOrUnfollowPayload {
+  followUserEdge: UserResponseEdge!
+  clientMutationId: String
+}
+
+type UserResponseEdge {
+  cursor: String
+  node: User
 }
 
 type AddCommentPayload {
@@ -193,6 +205,7 @@ type Query {
 type Mutation {
   signUp(userName: String!, fullName: String!, password: String!): String!
   signIn(userName: String!, password: String!): String!
+  followOrUnfollow(input: FollowOrUnfollowInput!): FollowOrUnfollowPayload
   addTodo(input: AddTodoInput!): AddTodoPayload
   updateTodo(input: UpdateTodoInput!): UpdateTodoPayload
   deleteTodo(input: DeleteTodoInput!): DeleteTodoPayload
@@ -202,6 +215,11 @@ type Mutation {
   addComment(input: AddCommentInput!): AddCommentPayload
   deleteComment(input: DeleteCommentInput!): DeleteCommentPayload
   likeComment(input: LikeCommentInput!): LikeCommentPayload
+}
+
+input FollowOrUnfollowInput {
+  id: ID!
+  clientMutationId: String
 }
 
 input AddTodoInput {

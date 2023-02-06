@@ -1,15 +1,7 @@
 import { UseGuards } from '@nestjs/common';
-import {
-  Args,
-  Query,
-  Resolver,
-  ID,
-  ResolveField,
-  Parent,
-} from '@nestjs/graphql';
+import { Args, Query, Resolver, ID } from '@nestjs/graphql';
 import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
 import { AuthGraphGuard, GetUser, User } from 'src/user';
-import { UserService } from 'src/user/user.service';
 import { CommentService } from './comment.service';
 import { CommentConnection, Comment } from './types';
 import {

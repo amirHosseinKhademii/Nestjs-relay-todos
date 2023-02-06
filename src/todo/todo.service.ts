@@ -17,7 +17,8 @@ export class TodoService {
     args: ConnectionArgs,
     user: string,
   ): Promise<TodoConnection> {
-    return await findAll(args, this.repo, { user: user });
+    return await findAll(args, this.repo);
+    // return await findAll(args, this.repo, { user: user });
   }
 
   async findTodoById(id: string) {
