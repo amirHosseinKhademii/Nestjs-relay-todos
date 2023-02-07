@@ -19,7 +19,11 @@ import {
 import { toGlobalId } from 'graphql-relay';
 import { ConnectionArgs, nextId } from 'src/relay';
 import { findAll } from 'src/services';
-import { FollowPayload, UsersConnection } from './types/user.response';
+import {
+  AuthPayload,
+  FollowPayload,
+  UsersConnection,
+} from './types/user.response';
 
 @Injectable()
 export class UserService {
@@ -64,11 +68,18 @@ export class UserService {
     }
   }
 
-  async signinUser({ userName, password }: SigninUserInput): Promise<string> {
+  async signinUser({
+    userName,
+    password,
+  }: SigninUserInput): Promise<AuthPayload> {
     const user = await this.repo.findOneBy({ userName });
-    if (user && (await bcrypt.compare(password, user.password)))
-      return await this.jwt.sign({ userName });
-    else throw new UnauthorizedException('Check your credentials.');
+    if (user && (await bcrypt.compare(password, user.password))) {
+      const token = await this.jwt.sign({ userName });
+      return {
+        token,
+        user,
+      };
+    } else throw new UnauthorizedException('Check your credentials.');
   }
 
   async followOrUnfollowUser({ id }: FollowInput, followerId: string) {

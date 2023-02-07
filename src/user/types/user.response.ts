@@ -23,3 +23,12 @@ export class FollowPayload {
   @Field(() => String)
   clientMutationId: string;
 }
+
+@ObjectType()
+export class AuthPayload {
+  @Field(() => User)
+  user: User;
+
+  @Field(() => String)
+  token: string;
+}

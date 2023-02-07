@@ -6,7 +6,11 @@ import {
   SigninUserInput,
 } from './types/user.input';
 import { User } from './types';
-import { FollowPayload, UsersConnection } from './types/user.response';
+import {
+  AuthPayload,
+  FollowPayload,
+  UsersConnection,
+} from './types/user.response';
 import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
 import { GetUser } from './decorators';
 import { UseGuards } from '@nestjs/common';
@@ -38,12 +42,12 @@ export class UserResolver {
     return this.service.finduserById(id);
   }
 
-  @Mutation(() => String)
+  @Mutation(() => AuthPayload)
   signUp(@Args() body: CreateUserInput) {
     return this.service.signupUser(body);
   }
 
-  @Mutation(() => String)
+  @Mutation(() => AuthPayload)
   signIn(@Args() body: SigninUserInput) {
     return this.service.signinUser(body);
   }

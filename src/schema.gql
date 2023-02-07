@@ -65,6 +65,11 @@ type UserPageInfo {
   hasNextPage: Boolean!
 }
 
+type AuthPayload {
+  user: User!
+  token: String!
+}
+
 type FollowOrUnfollowPayload {
   user: User!
   clientMutationId: String
@@ -198,8 +203,8 @@ type Query {
 }
 
 type Mutation {
-  signUp(userName: String!, fullName: String!, password: String!): String!
-  signIn(userName: String!, password: String!): String!
+  signUp(userName: String!, fullName: String!, password: String!): AuthPayload!
+  signIn(userName: String!, password: String!): AuthPayload!
   followOrUnfollow(input: FollowOrUnfollowInput!): FollowOrUnfollowPayload
   addTodo(input: AddTodoInput!): AddTodoPayload
   updateTodo(input: UpdateTodoInput!): UpdateTodoPayload
