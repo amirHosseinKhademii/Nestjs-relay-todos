@@ -190,6 +190,43 @@ type DeleteTodoPayload {
   clientMutationId: String
 }
 
+type Message implements Node {
+  id: ID!
+  body: String!
+  created_at: DateTime
+  updated_at: DateTime
+  sender: String!
+  receiver: User!
+  chatId: String!
+}
+
+type MessageConnection {
+  edges: [MessageEdge!]
+  pageInfo: MessagePageInfo
+}
+
+type MessageEdge {
+  cursor: String
+  node: Message
+}
+
+type MessagePageInfo {
+  startCursor: String
+  endCursor: String
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+}
+
+type AddMessagePayload {
+  addMessageEdge: MessageResponseEdge!
+  clientMutationId: String
+}
+
+type MessageResponseEdge {
+  cursor: String
+  node: Message
+}
+
 type Query {
   node(id: ID!): Node
   nodes(ids: ID!): [Node!]
@@ -200,6 +237,11 @@ type Query {
   todo(id: ID!): Todo!
   cards(before: String, after: String, first: Float, last: Float, query: String): CardConnection!
   comments(before: String, after: String, first: Float, last: Float, cardId: ID!, query: String): CommentConnection!
+  messages(before: String, after: String, first: Float, last: Float, query: MessagesQuery!): MessageConnection!
+}
+
+input MessagesQuery {
+  chatId: String!
 }
 
 type Mutation {
@@ -215,6 +257,7 @@ type Mutation {
   addComment(input: AddCommentInput!): AddCommentPayload
   deleteComment(input: DeleteCommentInput!): DeleteCommentPayload
   likeComment(input: LikeCommentInput!): LikeCommentPayload
+  addMessage(input: AddMessageInput!): AddMessagePayload
 }
 
 input FollowOrUnfollowInput {
@@ -275,6 +318,12 @@ input DeleteCommentInput {
 
 input LikeCommentInput {
   id: ID!
+  clientMutationId: String
+}
+
+input AddMessageInput {
+  body: String!
+  receiver: String!
   clientMutationId: String
 }
 

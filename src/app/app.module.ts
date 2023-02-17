@@ -10,13 +10,14 @@ import { User, UserModule } from 'src/user';
 import { Card, CardModule } from 'src/card';
 import { Todo, TodoModule } from 'src/todo';
 import { Comment, CommentModule } from 'src/comment';
+import { Message, MessageModule } from 'src/message';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       ...typeormConfig,
-      entities: [User, Card, Todo, Comment],
+      entities: [User, Card, Todo, Comment, Message],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -29,6 +30,7 @@ import { Comment, CommentModule } from 'src/comment';
     TodoModule,
     CardModule,
     CommentModule,
+    MessageModule,
   ],
   providers: [NodeResolver],
 })
