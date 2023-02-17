@@ -17,13 +17,9 @@ import {
   SigninUserInput,
 } from './types/user.input';
 import { toGlobalId } from 'graphql-relay';
-import { ConnectionArgs, nextId } from 'src/relay';
+import { ConnectionArgs } from 'src/relay';
 import { findAll } from 'src/services';
-import {
-  AuthPayload,
-  FollowPayload,
-  UsersConnection,
-} from './types/user.response';
+import { AuthPayload, UsersConnection } from './types/user.response';
 
 @Injectable()
 export class UserService {
