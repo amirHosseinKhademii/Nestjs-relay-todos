@@ -19,3 +19,12 @@ export class AddMessagePayload {
   @Field(() => String)
   clientMutationId: string;
 }
+
+@ObjectType()
+export class AddMessageSubPayload {
+  @Field(() => MessageResponseEdge)
+  addMessageEdge: MessageResponseEdge;
+
+  @Field(() => String)
+  clientMutationId: string;
+}

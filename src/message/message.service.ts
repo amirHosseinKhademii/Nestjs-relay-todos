@@ -28,14 +28,12 @@ export class MessageService {
     args: CreateMessageInput,
     user: string,
   ): Promise<AddMessagePayload> {
-    const chatId = uuid();
     const guid = uuid();
     const id = toGlobalId('Message', guid);
     const message = await this.repo.create({
       ...args,
       id,
-      sender: user,
-      chatId,
+      user,
     });
     const result = await this.repo.save(message);
     return {

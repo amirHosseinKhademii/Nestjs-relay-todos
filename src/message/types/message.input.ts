@@ -13,4 +13,9 @@ export class CreateMessageInput {
   @IsString()
   @Field(() => String)
   receiver: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Field(() => String)
+  chatId: string;
 }

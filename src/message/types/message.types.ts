@@ -34,7 +34,7 @@ export class Message implements NodeInterface {
 
   @Column()
   @Field(() => String)
-  sender: string;
+  user: string;
 
   @Column()
   @Field(() => User)

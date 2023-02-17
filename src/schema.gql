@@ -195,7 +195,7 @@ type Message implements Node {
   body: String!
   created_at: DateTime
   updated_at: DateTime
-  sender: String!
+  user: String!
   receiver: User!
   chatId: String!
 }
@@ -217,14 +217,19 @@ type MessagePageInfo {
   hasNextPage: Boolean!
 }
 
-type AddMessagePayload {
+type AddMessageSubPayload {
   addMessageEdge: MessageResponseEdge!
-  clientMutationId: String
+  clientMutationId: String!
 }
 
 type MessageResponseEdge {
   cursor: String
   node: Message
+}
+
+type AddMessagePayload {
+  addMessageEdge: MessageResponseEdge!
+  clientMutationId: String
 }
 
 type Query {
@@ -324,6 +329,7 @@ input LikeCommentInput {
 input AddMessageInput {
   body: String!
   receiver: String!
+  chatId: String!
   clientMutationId: String
 }
 
@@ -331,4 +337,5 @@ type Subscription {
   todoUpdated: Todo!
   cardAdded: Card!
   cardUpdated: Card!
+  messageAdded(chatId: String!): AddMessageSubPayload!
 }

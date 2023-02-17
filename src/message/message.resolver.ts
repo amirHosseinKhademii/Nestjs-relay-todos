@@ -1,5 +1,13 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+  Subscription,
+} from '@nestjs/graphql';
+import { PubSub } from 'graphql-subscriptions';
 import { ConnectionArgs, InputArg, RelayMutation } from 'src/relay';
 import { AuthGraphGuard, GetUser, User } from 'src/user';
 import { UserService } from 'src/user/user.service';
@@ -9,8 +17,11 @@ import {
   Message,
   MessageConnection,
   MessagesQuery,
+  AddMessagePayload,
+  AddMessageSubPayload,
 } from './types';
-import { AddMessagePayload } from './types/message.response';
+
+const pubSub = new PubSub();
 
 @Resolver(() => Message)
 @UseGuards(new AuthGraphGuard())
@@ -29,15 +40,30 @@ export class MessageResolver {
   }
 
   @RelayMutation(() => AddMessagePayload)
-  addMessage(
+  async addMessage(
     @GetUser() user: User,
     @InputArg(() => CreateMessageInput) input: CreateMessageInput,
   ): Promise<AddMessagePayload> {
-    return this.service.addMessage(input, user.id);
+    const message = this.service.addMessage(input, user.id);
+    pubSub.publish('messageAdded', {
+      messageAdded: await message,
+    });
+    return message;
   }
 
   @ResolveField()
   receiver(@Parent() message: Message): Promise<User> {
     return this.userService.finduserById(message.receiver);
+  }
+
+  @Subscription(() => AddMessageSubPayload, {
+    name: 'messageAdded',
+    filter: (
+      payload: { messageAdded: AddMessageSubPayload },
+      variables: { chatId: string },
+    ) => payload.messageAdded.addMessageEdge.node.chatId === variables.chatId,
+  })
+  messageAdded(@Args('chatId') chatId: string) {
+    return pubSub.asyncIterator('messageAdded');
   }
 }
